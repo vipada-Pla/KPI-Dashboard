@@ -24,7 +24,7 @@
 |---|---|
 | `app/index.html` | หน้าแอป (HTML/CSS/JS) ใช้ runtime ของ Claude Data dashboard (`dash.*`, `claude.use`) — เปิดตรงในเบราว์เซอร์ไม่ได้ |
 | `app/DATA_MODEL.md` | โครงสร้างข้อมูล |
-| `google-form/Foodle_HelpForm_Setup.gs` | Google Apps Script สร้างฟอร์ม "แจ้งการช่วยเพื่อน" + ชีตคำตอบ |
+| `Foodle_HelpForm_Setup.gs` | Google Apps Script สร้างฟอร์ม "แจ้งการช่วยเพื่อน" + ชีตคำตอบ |
 
 ข้อมูลคะแนนจริงอยู่ในแอปและไฟล์ `KPI_Dashboard_Data_2026.xlsx` บน SharePoint — ไม่เก็บใน repo นี้
 
