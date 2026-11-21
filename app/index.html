@@ -1,0 +1,1068 @@
+<meta name="dash-one-writer">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500&display=swap');
+.fn-wrap{display:flex;flex-direction:column;gap:var(--cds-gap-xl);font-family:var(--font-anthropic-sans);color:var(--color-fg)}
+.fn-title{font-family:var(--font-anthropic-serif);font-weight:400;font-size:var(--cds-font-size-title);margin:0}
+.fn-sub{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin:var(--cds-gap-xs) 0 0}
+.fn-take{font-size:var(--cds-font-size-body);line-height:1.6;margin:var(--cds-gap-sm) 0 0;max-width:62rem}
+.fn-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--cds-gap-md)}
+.fn-card{background:var(--color-panel);border:1px solid var(--color-border-line);border-radius:var(--cds-radius);padding:var(--cds-pad-lg)}
+.fn-card h3,.fn-sec h2{margin:0;font-size:var(--cds-font-size-body);font-weight:var(--cds-font-weight-medium)}
+.fn-card .fn-win{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption)}
+.fn-big{font-family:var(--font-anthropic-serif);font-weight:400;font-size:2.2rem;line-height:1.2;margin-top:var(--cds-gap-sm);font-variant-numeric:tabular-nums;min-height:2.6rem}
+.fn-note{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin-top:var(--cds-gap-xs)}
+.fn-good{color:var(--color-ok)} .fn-badc{color:var(--color-bad)}
+.fn-sec{display:flex;flex-direction:column;gap:var(--cds-gap-sm)}
+.fn-sec .fn-desc{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);margin:0}
+.fn-scroll{overflow-x:auto}
+.fn-table{border-collapse:collapse;width:100%;font-size:var(--cds-font-size-caption);font-variant-numeric:tabular-nums}
+.fn-table th,.fn-table td{border-bottom:1px solid var(--color-border-line);padding:6px 8px;text-align:left;vertical-align:top}
+.fn-table th{color:var(--color-fg-muted);font-weight:var(--cds-font-weight-medium);white-space:nowrap}
+.fn-heat td.fn-c,.fn-heat th.fn-c{text-align:center;min-width:44px}
+.fn-heat td.fn-c{border-radius:4px}
+.fn-l0{color:var(--color-fg-muted)}
+.fn-legend{display:flex;flex-wrap:wrap;gap:var(--cds-gap-md);font-size:var(--cds-font-size-caption);color:var(--color-fg-muted)}
+.fn-legend span{display:inline-flex;align-items:center;gap:6px}
+.fn-legend i{display:inline-block;width:14px;height:14px;border-radius:6px}
+.fn-chart{position:relative;min-height:260px}
+.fn-chart svg text{fill:var(--cds-text-secondary);font-size:var(--cds-font-size-caption)}
+.fn-tip{position:absolute;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);box-shadow:var(--cds-shadow-popover);border-radius:var(--cds-radius);padding:6px 10px;font-size:var(--cds-font-size-caption);white-space:nowrap;z-index:5}
+.fn-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--cds-gap-xl)}
+.fn-rules{margin:0;padding-left:1.2rem;font-size:var(--cds-font-size-caption);line-height:1.7}
+.fn-empty{color:var(--color-fg-muted);font-size:var(--cds-font-size-caption);padding:var(--cds-pad-md) 0}
+details.fn-det summary{cursor:pointer;font-weight:var(--cds-font-weight-medium)}
+details.fn-det{font-size:var(--cds-font-size-caption);line-height:1.7}
+.fn-panel{display:flex;flex-direction:column;gap:var(--cds-gap-xl)}
+.fn-panel[hidden]{display:none}
+.fn-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--cds-gap-md);padding:var(--cds-pad-lg)}
+.fn-form label{display:flex;flex-direction:column;gap:4px;font-size:var(--cds-font-size-caption)}
+.fn-form input,.fn-form textarea{font:inherit;font-size:var(--cds-font-size-body);border:1px solid var(--color-border-line);padding:6px 8px}
+.fn-form textarea{min-height:64px;resize:vertical}
+.fn-wide{grid-column:1/-1}
+.fn-actions{display:flex;align-items:center;gap:var(--cds-gap-md);flex-wrap:wrap}
+.fn-btn2{font:inherit;font-size:var(--cds-font-size-caption);padding:3px 10px;background:var(--color-bg);color:var(--color-fg);cursor:pointer;margin:0 4px 4px 0}
+.fn-btn:disabled,.fn-btn2:disabled{opacity:.45;cursor:not-allowed}
+.fn-ok{color:var(--color-ok);font-size:var(--cds-font-size-caption)} .fn-err{color:var(--color-bad);font-size:var(--cds-font-size-caption);margin:0}
+@media print{.fn-tabs,.fn-form{display:none}}
+
+/* ===== Foodle Noodle CI theme — calm white surfaces, pastel accents ===== */
+.fn-wrap{--fn-green:#3C672E;--fn-green2:#4A7545;--fn-lime:#92D050;--fn-chart:#6BA77A;--fn-ink:#24402A;--fn-mint:#DDF3E3;--fn-mint2:#C4E8CF;--fn-butter:#FFF3C7;--fn-lav:#E7E1FA;--fn-rose:#FBDADA;--fn-pink:#FFDDE8;--fn-pink2:#FFC6D9;--fn-pinkink:#A83E68;--fn-sage:#F5F8F5;--fn-line:#E6EFE7;--fn-r:18px;
+  font-family:'Prompt',var(--font-anthropic-sans);font-weight:300;letter-spacing:.1px;gap:28px}
+.fn-wrap b,.fn-wrap strong{font-weight:500}
+.fn-hero{position:relative;overflow:hidden;border-radius:24px;padding:28px 210px 24px 28px;color:var(--fn-ink);background:linear-gradient(120deg,#F4FBF6 0%,#FFFFFF 55%,#FFF5F8 100%);border:1px solid var(--fn-line);box-shadow:0 4px 18px rgba(36,64,42,.05)}
+.fn-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(196,232,207,.35)}
+.fn-hero::before{content:"";position:absolute;left:-40px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:rgba(255,198,217,.25)}
+.fn-brand{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative;z-index:1}
+.fn-brand img{width:58px;height:auto;background:#fff;border-radius:14px;padding:6px;box-shadow:0 4px 12px rgba(60,103,46,.12)}
+.fn-chip{display:inline-block;padding:4px 12px;border-radius:999px;background:#fff;color:var(--fn-pinkink);font-weight:500;font-size:var(--cds-font-size-caption);letter-spacing:.5px;box-shadow:0 2px 8px rgba(60,103,46,.08)}
+.fn-hero .fn-title{font-family:'Kanit',var(--font-anthropic-sans);font-weight:600;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.15;color:#2F5427;position:relative;z-index:1}
+.fn-hero .fn-sub{color:#4E6B52;position:relative;z-index:1}
+.fn-hero .fn-take{color:var(--fn-ink);position:relative;z-index:1;background:#fff;border:1px solid var(--fn-line);border-radius:14px;padding:12px 16px;margin-top:16px}
+.fn-hero .fn-take b{color:#2F5427}
+.fn-hero .fn-good,.fn-tiles .fn-good{color:#2E8B57} .fn-hero .fn-badc,.fn-tiles .fn-badc{color:#C0453F}
+.fn-mascot-wrap{position:absolute;right:28px;top:50%;margin-top:-80px;width:160px;height:160px;border-radius:50%;background:#F7FBF8;border:1px solid var(--fn-line);display:grid;place-items:center;z-index:1;box-shadow:0 6px 18px rgba(36,64,42,.08)}
+.fn-mascot-wrap svg{width:128px;height:auto}
+.fn-mascot-name{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--fn-pink2);color:var(--fn-pinkink);font-family:'Kanit',var(--font-anthropic-sans);font-weight:500;font-size:var(--cds-font-size-caption);padding:3px 12px;border-radius:999px}
+@media (prefers-reduced-motion:no-preference){.fn-mascot-wrap svg{animation:fn-bob 3.2s ease-in-out infinite}.fn-steam{animation:fn-steam 2.4s ease-in-out infinite}}
+@keyframes fn-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes fn-steam{0%,100%{opacity:.35}50%{opacity:.9}}
+@media (max-width:720px){.fn-hero{padding:20px}.fn-mascot-wrap{position:relative;right:auto;top:auto;margin:18px 0 6px;width:110px;height:110px}.fn-mascot-wrap svg{width:88px}}
+.fn-tabs{display:flex;flex-wrap:wrap;background:var(--fn-sage);border:1px solid var(--fn-line);border-radius:999px;padding:5px;gap:4px;width:fit-content;max-width:100%}
+.fn-tab{background:none;border:1px solid transparent;border-radius:999px;padding:9px 18px;font:inherit;font-family:'Kanit',var(--font-anthropic-sans);font-weight:400;color:#5B7360;cursor:pointer;transition:background .2s,color .2s}
+.fn-tab[aria-selected="true"]{background:#fff;color:#2F5427;font-weight:500;border-color:var(--fn-line);box-shadow:0 2px 8px rgba(36,64,42,.08)}
+.fn-tab span:not(:empty){display:inline-block;min-width:18px;margin-left:4px;padding:0 6px;border-radius:999px;background:#F7B3C8;color:#7A2448;font-size:11px;line-height:18px}
+@media (max-width:560px){.fn-tab{padding:8px 12px}}
+.fn-tiles{gap:14px}
+.fn-card{border-radius:var(--fn-r);position:relative}
+.fn-tiles .fn-card{background:#fff;border:1px solid var(--fn-line);box-shadow:0 2px 10px rgba(36,64,42,.04)}
+.fn-tiles .fn-card::before{content:"";position:absolute;left:20px;top:0;width:48px;height:5px;border-radius:0 0 4px 4px}
+.fn-tiles .fn-card:nth-child(1)::before{background:#9FD6AE}
+.fn-tiles .fn-card:nth-child(2)::before{background:#A9D3F2}
+.fn-tiles .fn-card:nth-child(3)::before{background:#F7B3C8}
+.fn-tiles .fn-card:nth-child(4)::before{background:#C9BDF2}
+.fn-card h3{font-family:'Kanit',var(--font-anthropic-sans);font-weight:500;color:var(--fn-ink)}
+.fn-tiles .fn-win,.fn-tiles .fn-note{color:#55695A}
+.fn-big{font-family:'Kanit',var(--font-anthropic-sans);font-weight:600;color:#2F5427;font-size:2.4rem}
+.fn-sec{gap:10px}
+.fn-sec h2{font-family:'Kanit',var(--font-anthropic-sans);font-weight:500;font-size:1.15rem;display:flex;align-items:center;gap:8px;color:var(--fn-ink)}
+.fn-sec h2::before{content:"";width:8px;height:8px;border-radius:50%;background:#F29DB9;flex:none}
+.fn-scroll{border:1px solid var(--fn-line);border-radius:var(--fn-r);background:var(--color-panel)}
+.fn-table th{background:var(--fn-sage);color:#2F5427;font-family:'Kanit',var(--font-anthropic-sans);font-weight:500;padding:10px}
+.fn-table td{padding:9px 10px;border-bottom:1px solid var(--fn-line)}
+.fn-table tr:last-child td{border-bottom:0}
+.fn-heat td.fn-c{border-radius:10px;font-weight:400;border:3px solid var(--color-panel);color:#24402A}
+.fn-l4{background:#CDEBD5}.fn-l3{background:#EAF5DF}.fn-l2{background:#FFF1C9}.fn-l1{background:#FADADA}.fn-l0{background:transparent}
+.fn-chart{background:var(--color-panel);border:1px solid var(--fn-line);border-radius:var(--fn-r);padding:10px}
+.fn-form{border-radius:var(--fn-r);border:1px solid var(--fn-line);background:#fff;color:var(--fn-ink);box-shadow:0 8px 24px rgba(60,103,46,.06)}
+.fn-form label{color:#55695A}
+.fn-form input,.fn-form textarea{border-radius:12px;border-color:var(--fn-line);background:#FAFDFB;color:var(--fn-ink)}
+.fn-form input:focus,.fn-form textarea:focus{outline:2px solid var(--fn-pink2);border-color:#E886A8}
+.fn-btn{font:inherit;border-radius:999px;background:#3C672E;border:1px solid #3C672E;color:#fff;font-family:'Kanit',var(--font-anthropic-sans);font-weight:500;padding:9px 26px;cursor:pointer;box-shadow:0 6px 16px rgba(60,103,46,.25)}
+.fn-btn2{border-radius:999px;border:1px solid var(--fn-line)}
+.fn-btn2:not(:disabled):hover{background:var(--fn-pink);border-color:#E886A8}
+.fn-sample{background:var(--fn-butter);color:#5E4A00;border-radius:14px;padding:var(--cds-pad-sm) var(--cds-pad-md);font-size:var(--cds-font-size-caption)}
+.fn-st-wait{background:var(--fn-butter);color:#7A5B00;border-radius:999px}
+.fn-st-yes{background:var(--fn-mint2);color:#24402A;border-radius:999px}
+.fn-st-no{background:var(--fn-rose);color:#8A2F2B;border-radius:999px}
+.fn-cheer{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#F7FBF8;border:1px solid var(--fn-line);border-radius:var(--fn-r);padding:14px 18px}
+.fn-cheer svg{width:200px;max-width:100%;height:auto;flex:none;background:var(--color-panel);border-radius:16px}
+.fn-cheer p{margin:0;flex:1;min-width:200px;font-size:var(--cds-font-size-body);line-height:1.6}
+.fn-cheer strong{font-family:'Kanit',var(--font-anthropic-sans);color:#2F5427;font-size:1.1rem;display:block}
+details.fn-det{background:#F7FBF8;border:1px solid var(--fn-line);border-radius:var(--fn-r);padding:12px 16px}
+.fn-filterbar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.fn-filterbar label{display:flex;flex-direction:column;gap:4px;font-size:var(--cds-font-size-caption);color:#55695A}
+.fn-in{font:inherit;font-size:var(--cds-font-size-caption);border:1px solid #DCE7DD;border-radius:10px;padding:7px 9px;background:#fff;color:#24402A;width:100%;box-sizing:border-box}
+.fn-in:focus{outline:2px solid #FFC6D9;border-color:#E886A8}
+.fn-in-w{min-width:220px}
+.fn-in-s{width:78px}
+.fn-entry td{vertical-align:middle}
+.fn-entry select{min-width:130px}
+.fn-entry td:nth-child(5){min-width:180px}
+</style>
+
+<div class="fn-wrap" data-read lang="th">
+  <header id="top" class="fn-hero">
+    <div class="fn-brand"><img src="/_blob/22a88471a14658367cc9a1f9951ed117" alt="Foodle Noodle"><span class="fn-chip">KPI · EMPATHY · 2026</span></div>
+    <h1 class="fn-title">KPI &amp; Empathy App 2026 — Foodle Noodle</h1>
+    <p class="fn-sub">คะแนน KPI รายแผนก (เต็ม 5) ม.ค.–ต.ค. 2026 · ข้อมูลจากไฟล์คะแนน KPI 2026 และรายงาน PPTX ประจำเดือน</p>
+    <p class="fn-take" id="takeaway">เดือน <b data-draw="lm">—</b> คะแนนเฉลี่ยทั้งบริษัท <b data-draw="clatest" data-source="headline" data-field="company_latest" data-row="0">—</b> จาก 5 (<span data-draw="cchg" data-source="headline" data-field="change" data-row="0">—</span> จากเดือนก่อน) จาก <b data-draw="drep" data-source="headline" data-field="depts_reported" data-row="0">—</b> แผนกที่ส่งรายงาน · แผนกคะแนนสูงสุด <b data-draw="topd" data-source="headline" data-field="top_dept" data-row="0">—</b> · ต่ำสุด <b data-draw="lowd" data-source="headline" data-field="low_dept" data-row="0">—</b> · ยอดขายสะสมได้ <b data-draw="ytdpct2" data-source="headline" data-field="sales_ytd_pct" data-row="0">—</b> ของเป้าทั้งปี 45 ล้านบาท</p>
+    <div class="fn-mascot-wrap">
+      <svg viewBox="0 0 200 190" role="img" aria-label="น้องฟู้ดเดิ้ล มาสคอตชามก๋วยเตี๋ยวยิ้มโบกมือ">
+        <g class="fn-steam" fill="none" stroke="#A9C98F" stroke-width="5" stroke-linecap="round"><path d="M70 40 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M100 34 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M130 40 q-8 -10 0 -20 q8 -10 0 -20"/></g>
+        <g stroke="#7A4E2D" stroke-width="7" stroke-linecap="round"><line x1="128" y1="70" x2="182" y2="22"/><line x1="138" y1="76" x2="192" y2="34"/></g>
+        <path d="M34 84 q8 -26 30 -16 q14 -20 36 -8 q20 -14 36 4 q22 -6 30 20 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="3"/>
+        <path d="M50 80 q10 -10 20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#F1DFA8" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="72" cy="72" r="7" fill="#92D050"/><circle cx="128" cy="70" r="6" fill="#F28B82"/>
+        <path d="M26 84 h148 q-4 60 -74 72 q-70 -12 -74 -72 z" fill="#3C672E"/>
+        <path d="M26 84 h148" stroke="#2C4F22" stroke-width="6" stroke-linecap="round"/>
+        <rect x="78" y="154" width="44" height="12" rx="6" fill="#2C4F22"/>
+        <ellipse cx="74" cy="112" rx="7" ry="9" fill="#fff"/><ellipse cx="126" cy="112" rx="7" ry="9" fill="#fff"/>
+        <circle cx="75" cy="114" r="4.5" fill="#1F2A1B"/><circle cx="127" cy="114" r="4.5" fill="#1F2A1B"/>
+        <circle cx="77" cy="111" r="1.8" fill="#fff"/><circle cx="129" cy="111" r="1.8" fill="#fff"/>
+        <ellipse cx="60" cy="126" rx="9" ry="5" fill="#F7A1A1" opacity=".85"/><ellipse cx="140" cy="126" rx="9" ry="5" fill="#F7A1A1" opacity=".85"/>
+        <path d="M90 124 q10 12 20 0" fill="#C8464A" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 104 q-18 -6 -16 -26" stroke="#3C672E" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="12" cy="76" r="8" fill="#3C672E"/>
+        <path d="M172 104 q14 8 10 22" stroke="#3C672E" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="182" cy="128" r="8" fill="#3C672E"/>
+        <path d="M8 54 l3 6 6 1 -5 4 1 6 -5 -3 -5 3 1 -6 -5 -4 6 -1z" fill="#92D050"/>
+      </svg>
+      <span class="fn-mascot-name">น้องฟู้ดเดิ้ล</span>
+    </div>
+  </header>
+
+  <nav class="fn-tabs" role="tablist" aria-label="เมนู">
+    <button type="button" class="fn-tab" role="tab" data-tab="kpi" aria-selected="true">Dashboard KPI</button>
+    <button type="button" class="fn-tab" role="tab" data-tab="entry" aria-selected="false">กรอก KPI / HR อนุมัติ <span data-draw="kpipendtab" data-source="kpi_entry_stats" data-field="pending" data-row="0"></span></button>
+    <button type="button" class="fn-tab" role="tab" data-tab="app" aria-selected="false">บันทึกช่วยเพื่อน / Empathy</button>
+  </nav>
+
+  <div id="kpi" class="fn-panel" role="tabpanel">
+  <section class="fn-tiles" id="tiles">
+    <div class="fn-card" id="tile-score">
+      <h3>คะแนนเฉลี่ยทั้งบริษัท</h3>
+      <div class="fn-win" data-draw="lmwin">—</div>
+      <div class="fn-big" data-draw="t_score" data-source="headline" data-field="company_latest" data-row="0">—</div>
+      <div class="fn-note" data-draw="t_chg">—</div>
+    </div>
+    <div class="fn-card" id="tile-sales">
+      <h3>ยอดขายสะสม (YTD)</h3>
+      <div class="fn-win" data-draw="saleswin">—</div>
+      <div class="fn-big" data-draw="t_sales" data-source="headline" data-field="sales_ytd" data-row="0">—</div>
+      <div class="fn-note"><span data-draw="t_salespct" data-source="headline" data-field="sales_ytd_pct" data-row="0">—</span> ของเป้า 45 ล้านบาท/ปี</div>
+    </div>
+    <div class="fn-card" id="tile-below">
+      <h3>KPI ต่ำกว่าเกณฑ์มาตรฐาน</h3>
+      <div class="fn-win" data-draw="lmwin">—</div>
+      <div class="fn-big" data-draw="t_below" data-source="headline" data-field="below_count" data-row="0">—</div>
+      <div class="fn-note">ตัวที่ได้ต่ำกว่า 3 คะแนน (3 = ค่ามาตรฐาน)</div>
+    </div>
+    <div class="fn-card" id="tile-missing">
+      <h3>KPI ที่ยังไม่มีข้อมูล</h3>
+      <div class="fn-win" data-draw="lmwin">—</div>
+      <div class="fn-big" data-draw="t_missing" data-source="headline" data-field="missing_count" data-row="0">—</div>
+      <div class="fn-note">ไม่มีรายงาน หรือ รอข้อมูล (ไม่นับ N/A)</div>
+    </div>
+  </section>
+
+  <section class="fn-sec" id="heatmap">
+    <h2>คะแนนรายแผนก รายเดือน</h2>
+    <p class="fn-desc">ค่าเฉลี่ยของ KPI ที่ได้คะแนนในเดือนนั้น · "–" = ไม่มี KPI ที่ได้คะแนน (ไม่มีรายงาน หรือ N/A ทั้งหมด) · ฝ่ายบัญชียังไม่มี KPI ในตารางหลัก</p>
+    <div class="fn-legend">
+      <span><i class="fn-l4"></i>≥ 4.0 ดีมาก</span>
+      <span><i class="fn-l3"></i>3.0–3.99 ได้ตามเป้า</span>
+      <span><i class="fn-l2"></i>2.0–2.99 ต้องติดตาม</span>
+      <span><i class="fn-l1"></i>&lt; 2.0 ต้องปรับปรุง</span>
+    </div>
+    <div class="fn-scroll"><table class="fn-table fn-heat" data-draw="heat" data-source="dept_month"></table></div>
+  </section>
+
+  <section class="fn-sec" id="detail">
+    <h2>รายละเอียด KPI รายตัว</h2>
+    <p class="fn-desc">เลือกเดือนและแผนกเพื่อดูคะแนนทุกตัว พร้อมที่มาของคะแนน (ไฟล์ KPI หรือกรอกในแอปและ HR อนุมัติแล้ว)</p>
+    <div class="fn-filterbar">
+      <label>เดือน <select class="dash-select" id="f-month" aria-label="เลือกเดือน">
+        <option value="latest">เดือนล่าสุดที่มีคะแนน</option>
+        <option value="1">ม.ค. 2026</option><option value="2">ก.พ. 2026</option><option value="3">มี.ค. 2026</option><option value="4">เม.ย. 2026</option><option value="5">พ.ค. 2026</option><option value="6">มิ.ย. 2026</option><option value="7">ก.ค. 2026</option><option value="8">ส.ค. 2026</option><option value="9">ก.ย. 2026</option><option value="10">ต.ค. 2026</option><option value="11">พ.ย. 2026</option><option value="12">ธ.ค. 2026</option>
+      </select></label>
+      <label>แผนก <select class="dash-select" id="f-dept" aria-label="เลือกแผนก">
+        <option value="">ทุกแผนก</option><option>วางแผน/ผลิต</option><option>QA/QC</option><option>คลังสินค้า</option><option>วิศวกรรม/ซ่อมบำรุง</option><option>ซัพพลายเชน/จัดซื้อ</option><option>ฝ่ายขาย</option><option>R&amp;D</option><option>HR</option>
+      </select></label>
+    </div>
+    <div class="fn-scroll"><table class="fn-table" data-source="kpi_all" data-row-key="month_no,kpi_id">
+      <thead><tr><th data-field="month">เดือน</th><th data-field="dept">แผนก</th><th data-field="kpi">ตัวชี้วัด</th><th data-field="target">เป้าหมาย</th><th data-field="score">คะแนน</th><th data-field="status">สถานะ</th><th data-field="note">ที่มา / หมายเหตุ</th></tr></thead>
+      <tbody data-draw="detailrows"></tbody>
+    </table></div>
+  </section>
+
+  <div class="fn-two">
+    <section class="fn-sec" id="trend">
+      <h2>แนวโน้มคะแนนเฉลี่ยทั้งบริษัท</h2>
+      <p class="fn-desc">เฉลี่ยทุก KPI ที่ได้คะแนนในเดือนนั้น (เต็ม 5) · เดือนที่บางแผนกไม่ส่งรายงานอาจสูงกว่าความจริง</p>
+      <div class="fn-chart" data-draw="trendchart" data-source="company_month"></div>
+    </section>
+    <section class="fn-sec" id="sales">
+      <h2>ยอดขายรายเดือนเทียบเป้า 3.75 ล้านบาท/เดือน</h2>
+      <p class="fn-desc">ยอดขายจริง (บาท) จากแถว "รายได้ 45 ลบ./ปี" · เส้นประ = เป้ารายเดือน · ต.ค. ยังไม่มีข้อมูล</p>
+      <div class="fn-chart" data-draw="saleschart" data-source="sales"></div>
+    </section>
+  </div>
+
+  <section class="fn-sec" id="below">
+    <h2>KPI ที่ต่ำกว่าเกณฑ์ เดือนล่าสุด</h2>
+    <p class="fn-desc">ตัวที่ได้ต่ำกว่า 3 คะแนน — หัวข้อที่ควรคุยในประชุมประจำเดือน</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="below" data-row-key="kpi_id">
+      <thead><tr><th data-field="dept">แผนก</th><th data-field="kpi">ตัวชี้วัด</th><th data-field="score">คะแนน</th><th data-field="streak">ต่ำกว่าเกณฑ์ติดกัน (เดือน)</th><th data-field="note">หมายเหตุ</th></tr></thead>
+      <tbody data-draw="belowrows"></tbody>
+    </table></div>
+  </section>
+
+  <section class="fn-sec" id="missing">
+    <h2>ข้อมูลที่ยังขาด เดือนล่าสุด</h2>
+    <p class="fn-desc">ต้องตามให้ส่งก่อนประชุม — ไม่นำมาคิดคะแนน จึงอาจทำให้คะแนนรวมดูดีเกินจริง</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="missing" data-row-key="kpi_id">
+      <thead><tr><th data-field="dept">แผนก</th><th data-field="kpi">ตัวชี้วัด</th><th data-field="status">สถานะ</th><th data-field="note">หมายเหตุ</th></tr></thead>
+      <tbody data-draw="missingrows"></tbody>
+    </table></div>
+  </section>
+
+  </div>
+
+  <div id="entry" class="fn-panel" role="tabpanel" hidden>
+  <section class="fn-sec" id="kpiform">
+    <h2>กรอกคะแนน KPI รายเดือน</h2>
+    <p class="fn-desc">หัวหน้าแผนกกรอกคะแนน 0–5 ตามระดับค่าเป้าหมาย แล้วกด "ส่งให้ HR ตรวจ" · คะแนนขึ้น Dashboard เมื่อ HR อนุมัติแล้ว · ส่งซ้ำได้ ระบบใช้ฉบับล่าสุด (ฉบับที่อนุมัติแล้วจะกลับไปรอตรวจใหม่)</p>
+    <p class="fn-sample" id="e-ro" hidden>คุณเปิดดูได้อย่างเดียว — ต้องได้รับสิทธิ์ผู้แก้ไข (Editor) จึงจะกรอกหรืออนุมัติได้</p>
+    <div class="fn-filterbar">
+      <label>เดือน <select class="dash-select" id="e-month" aria-label="เดือนที่กรอก">
+        <option value="1">ม.ค. 2026</option><option value="2">ก.พ. 2026</option><option value="3">มี.ค. 2026</option><option value="4">เม.ย. 2026</option><option value="5">พ.ค. 2026</option><option value="6">มิ.ย. 2026</option><option value="7">ก.ค. 2026</option><option value="8">ส.ค. 2026</option><option value="9">ก.ย. 2026</option><option value="10">ต.ค. 2026</option><option value="11">พ.ย. 2026</option><option value="12">ธ.ค. 2026</option>
+      </select></label>
+      <label>แผนก <select class="dash-select" id="e-dept" aria-label="แผนกที่กรอก">
+        <option>วางแผน/ผลิต</option><option>QA/QC</option><option>คลังสินค้า</option><option>วิศวกรรม/ซ่อมบำรุง</option><option>ซัพพลายเชน/จัดซื้อ</option><option>ฝ่ายขาย</option><option>R&amp;D</option><option>HR</option>
+      </select></label>
+      <label>ชื่อผู้กรอก <input class="fn-in fn-in-w" id="e-name" maxlength="60" placeholder="เช่น หัวหน้าคลัง – สมหญิง"></label>
+    </div>
+    <div class="fn-scroll"><table class="fn-table fn-entry">
+      <thead><tr><th>ตัวชี้วัด</th><th>เป้าหมาย</th><th>คะแนน (0–5)</th><th>สถานะ</th><th>ผลจริง / หมายเหตุ</th><th>สถานะการตรวจ</th></tr></thead>
+      <tbody data-draw="kpientry"></tbody>
+    </table></div>
+    <div class="fn-actions">
+      <button type="button" class="fn-btn" id="e-submit">ส่งให้ HR ตรวจ</button>
+      <span class="fn-ok" id="e-ok" hidden>ส่งแล้ว รอ HR ตรวจ</span>
+      <span class="fn-err" id="e-err" hidden>ส่งไม่สำเร็จ — ตรวจสิทธิ์ผู้แก้ไขแล้วลองอีกครั้ง</span>
+      <span class="fn-err" id="e-name-msg" hidden>กรอกชื่อผู้กรอกก่อน</span>
+      <span class="fn-err" id="e-valid" hidden>KPI ที่สถานะ "ได้คะแนน" ต้องมีคะแนน 0–5</span>
+    </div>
+  </section>
+
+  <section class="fn-sec" id="approve">
+    <h2>HR ตรวจและอนุมัติ · รอตรวจ <span data-draw="kpipend" data-source="kpi_entry_stats" data-field="pending" data-row="0">—</span> รายการ</h2>
+    <p class="fn-desc">ตรวจคะแนนเทียบหลักฐานที่แผนกแนบในหมายเหตุ · ผู้ส่งอนุมัติรายการของตัวเองไม่ได้ · ส่งกลับได้พร้อมเหตุผล</p>
+    <div class="fn-filterbar">
+      <label>ชื่อผู้ตรวจ <input class="fn-in fn-in-w" id="r-name" maxlength="60" placeholder="เช่น HR – อังศนา"></label>
+      <label>เหตุผล (ถ้าส่งกลับ) <input class="fn-in fn-in-w" id="r-note" maxlength="200" placeholder="เช่น ขอหลักฐานผลนับสต็อก"></label>
+      <button type="button" class="fn-btn2" id="r-all">อนุมัติทั้งหมดที่ไม่ใช่ของฉัน</button>
+    </div>
+    <p class="fn-err" id="r-msg-name" hidden>กรอกชื่อผู้ตรวจก่อน</p>
+    <p class="fn-err" id="r-msg-err" hidden>ทำรายการไม่สำเร็จ — ลองอีกครั้ง</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="kpi_store" data-row-key="id">
+      <thead><tr><th data-field="month">เดือน</th><th data-field="dept">แผนก</th><th data-field="kpi">ตัวชี้วัด</th><th data-field="score">คะแนน</th><th data-field="status_kpi">สถานะ</th><th data-field="note">หมายเหตุ</th><th data-field="submitted_name">ส่งโดย</th><th>ดำเนินการ</th></tr></thead>
+      <tbody data-draw="apprrows"></tbody>
+    </table></div>
+  </section>
+
+  <section class="fn-sec" id="audit">
+    <h2>ประวัติการแก้ไขและอนุมัติ</h2>
+    <p class="fn-desc">30 รายการล่าสุด · ดาวน์โหลดทั้งหมดเป็น CSV ได้จากแถบ Sources ("ประวัติการแก้ไขและอนุมัติ KPI")</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="kpi_audit" data-row-key="id">
+      <thead><tr><th>เวลา</th><th data-field="action">การดำเนินการ</th><th data-field="month">เดือน</th><th data-field="dept">แผนก</th><th data-field="kpi_id">รหัส KPI</th><th data-field="score">คะแนน</th><th data-field="by_name">โดย</th><th data-field="note">หมายเหตุ</th></tr></thead>
+      <tbody data-draw="auditrows"></tbody>
+    </table></div>
+  </section>
+  </div>
+
+  <div id="app" class="fn-panel" role="tabpanel" hidden>
+  <section class="fn-sec" id="helpform">
+    <div class="fn-cheer">
+      <svg viewBox="0 0 260 150" role="img" aria-label="ชามก๋วยเตี๋ยวสองใบไฮไฟว์กัน มีหัวใจลอยอยู่ด้านบน">
+        <path d="M130 30 c-10 -16 -32 -4 -20 12 l20 18 20 -18 c12 -16 -10 -28 -20 -12z" fill="#F28B82"/>
+        <g fill="#92D050"><circle cx="96" cy="22" r="4"/><circle cx="168" cy="20" r="3"/><circle cx="182" cy="44" r="2.5"/></g>
+        <g transform="translate(20 50)">
+          <path d="M4 34 q6 -18 24 -12 q12 -14 28 -4 q16 -6 24 16 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="2.5"/>
+          <path d="M0 34 h88 q-3 44 -44 52 q-41 -8 -44 -52z" fill="#4A7545"/>
+          <circle cx="30" cy="56" r="4" fill="#1F2A1B"/><circle cx="58" cy="56" r="4" fill="#1F2A1B"/>
+          <ellipse cx="22" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><ellipse cx="66" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/>
+          <path d="M38 64 q6 8 12 0" fill="none" stroke="#1F2A1B" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M86 50 q18 -8 22 -26" stroke="#4A7545" stroke-width="8" stroke-linecap="round" fill="none"/>
+        </g>
+        <g transform="translate(152 50)">
+          <path d="M4 34 q6 -18 24 -12 q12 -14 28 -4 q16 -6 24 16 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="2.5"/>
+          <path d="M0 34 h88 q-3 44 -44 52 q-41 -8 -44 -52z" fill="#3C672E"/>
+          <path d="M24 56 q6 -6 12 0" fill="none" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round"/><path d="M52 56 q6 -6 12 0" fill="none" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="20" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><ellipse cx="68" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/>
+          <path d="M36 63 q8 10 16 0z" fill="#C8464A" stroke="#1F2A1B" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M2 50 q-18 -8 -22 -26" stroke="#3C672E" stroke-width="8" stroke-linecap="round" fill="none"/>
+        </g>
+        <g stroke="#F2B33D" stroke-width="3" stroke-linecap="round"><line x1="130" y1="64" x2="130" y2="56"/><line x1="120" y1="68" x2="114" y2="62"/><line x1="140" y1="68" x2="146" y2="62"/></g>
+        <circle cx="130" cy="74" r="7" fill="#4A7545"/>
+      </svg>
+      <p><strong>ช่วยเพื่อน = ได้ใจ + ได้คะแนน</strong>เห็นเพื่อนช่วยงาน บันทึกไว้เลย หัวหน้ายืนยันแล้วเพื่อนได้โบนัส Empathy สูงสุด +5 ต่อเดือน</p>
+    </div>
+    <h2>บันทึกการช่วยเพื่อน</h2>
+    <p class="fn-desc">หัวหน้าบันทึกแทนพนักงานที่ได้รับการช่วย · รายการใหม่รอหัวหน้าของผู้ช่วยกดยืนยัน · ผู้บันทึกยืนยันรายการของตัวเองไม่ได้</p>
+    <p class="fn-sample" id="ro-note" hidden>คุณเปิดดูได้อย่างเดียว — ต้องได้รับสิทธิ์ผู้แก้ไข (Editor) ของแอปนี้จึงจะบันทึกหรือยืนยันได้</p>
+    <form id="help-form" class="fn-form" autocomplete="off">
+      <label class="fn-wide">ชื่อของคุณ (ผู้บันทึก/ผู้ยืนยัน) <input name="me_name" required maxlength="60" placeholder="เช่น หัวหน้าผลิต – สมชาย"></label>
+      <label>วันที่ช่วย <input type="date" name="date" required></label>
+      <label>ประเภทการช่วย <select class="dash-select" name="help_type" required>
+        <option value="ช่วยงานในแผนก">ช่วยงานในแผนก (1 คะแนน)</option>
+        <option value="ช่วยงานข้ามแผนก">ช่วยงานข้ามแผนก (2 คะแนน)</option>
+        <option value="ช่วยแก้ปัญหาด่วน/คุณภาพ/ความปลอดภัย">ช่วยแก้ปัญหาด่วน/คุณภาพ/ความปลอดภัย (3 คะแนน)</option>
+      </select></label>
+      <label>ผู้ช่วย <input name="helper" list="fn-names" required maxlength="60" placeholder="ชื่อ-ชื่อเล่น"></label>
+      <label>แผนกผู้ช่วย <select class="dash-select" name="helper_dept" required>
+        <option>วางแผน/ผลิต</option><option>QA/QC</option><option>คลังสินค้า</option><option>วิศวกรรม/ซ่อมบำรุง</option><option>ซัพพลายเชน/จัดซื้อ</option><option>ฝ่ายขาย/แอดมินขาย</option><option>R&amp;D</option><option>HR</option><option>บัญชี</option>
+      </select></label>
+      <label>ผู้ได้รับการช่วย <input name="receiver" list="fn-names" required maxlength="60" placeholder="ชื่อ-ชื่อเล่น"></label>
+      <label>แผนกผู้ได้รับการช่วย <select class="dash-select" name="receiver_dept" required>
+        <option>วางแผน/ผลิต</option><option>QA/QC</option><option>คลังสินค้า</option><option>วิศวกรรม/ซ่อมบำรุง</option><option>ซัพพลายเชน/จัดซื้อ</option><option>ฝ่ายขาย/แอดมินขาย</option><option>R&amp;D</option><option>HR</option><option>บัญชี</option>
+      </select></label>
+      <label class="fn-wide">ช่วยเรื่องอะไร <textarea name="detail" required maxlength="300" placeholder="เช่น ช่วยนับสต็อกบรรจุภัณฑ์ก่อนตรวจรับ"></textarea><span>ทุกคนที่เปิดแอปเห็นรายการนี้ — เขียนเฉพาะเรื่องงาน ไม่ใส่เรื่องส่วนตัว สุขภาพ หรือเงินเดือน</span></label>
+      <div class="fn-wide fn-actions">
+        <button type="submit" class="fn-btn" id="save-btn">บันทึก</button>
+        <span class="fn-ok" id="msg-ok" hidden>บันทึกแล้ว รอหัวหน้ายืนยัน</span>
+        <span class="fn-err" id="msg-err" hidden>บันทึกไม่สำเร็จ — ตรวจว่าคุณมีสิทธิ์ผู้แก้ไข แล้วลองอีกครั้ง</span>
+        <span class="fn-err" id="msg-self" hidden>ผู้ช่วยกับผู้ได้รับการช่วยต้องเป็นคนละคน</span>
+      </div>
+    </form>
+    <datalist id="fn-names" data-draw="names"></datalist>
+  </section>
+
+  <section class="fn-sec" id="pending">
+    <h2>รอยืนยัน <span data-draw="pendcount" data-source="help_stats" data-field="pending" data-row="0">—</span> รายการ</h2>
+    <p class="fn-desc">หัวหน้าของผู้ช่วยตรวจว่าเป็นการช่วยจริง ไม่ใช่งานตาม JD ของตัวเอง แล้วกดยืนยันภายใน 7 วัน</p>
+    <p class="fn-err" id="msg-name" hidden>กรอกช่อง "ชื่อของคุณ" ในฟอร์มด้านบนก่อนกดยืนยัน</p>
+    <p class="fn-err" id="msg-act" hidden>ทำรายการไม่สำเร็จ — ลองอีกครั้ง</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="help_store" data-row-key="id">
+      <thead><tr><th data-field="date">วันที่</th><th data-field="helper">ผู้ช่วย</th><th data-field="receiver">ผู้ได้รับการช่วย</th><th data-field="help_type">ประเภท</th><th data-field="detail">รายละเอียด</th><th data-field="recorded_name">บันทึกโดย</th><th>ดำเนินการ</th></tr></thead>
+      <tbody data-draw="pendrows"></tbody>
+    </table></div>
+  </section>
+
+  <section class="fn-sec" id="empathy">
+    <h2>คะแนน Empathy รายคน</h2>
+    <p class="fn-desc">นับเฉพาะรายการที่ยืนยันแล้ว · โบนัสบวกเพิ่มจากคะแนนประเมิน 100 สูงสุด +5 ต่อเดือน</p>
+    <label class="fn-desc">เดือน <select class="dash-select" data-draw="emsel" data-source="empathy" aria-label="เลือกเดือน"></select></label>
+    <div class="fn-two">
+      <div class="fn-scroll"><table class="fn-table" data-source="empathy" data-row-key="key">
+        <thead><tr><th data-field="person">พนักงาน</th><th data-field="dept">แผนก</th><th data-field="count">ครั้งที่นับ</th><th data-field="points">คะแนน</th><th data-field="bonus">โบนัส</th></tr></thead>
+        <tbody data-draw="emprows"></tbody>
+      </table></div>
+      <div>
+        <ul class="fn-rules">
+          <li>ช่วยงานในแผนก = 1 คะแนน · ข้ามแผนก = 2 · ช่วยแก้ปัญหาด่วน/คุณภาพ/ความปลอดภัย = 3</li>
+          <li>ผู้ได้รับการช่วยเป็นคนบันทึก หัวหน้าของผู้ช่วยยืนยันภายใน 7 วัน</li>
+          <li>คู่เดิมนับได้ไม่เกิน 2 ครั้งต่อเดือน · ช่วยตัวเองหรืองานตาม JD ไม่นับ</li>
+          <li>โบนัส = คะแนนเดือนนั้น แต่ไม่เกิน +5 · ไม่มีการหักคะแนน</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="fn-sec" id="history">
+    <h2>ประวัติรายการล่าสุด</h2>
+    <p class="fn-desc">50 รายการล่าสุดทุกสถานะ · ดาวน์โหลดทั้งหมดเป็น CSV ได้จากแถบ Sources (แหล่งข้อมูล "บันทึกช่วยเพื่อน")</p>
+    <div class="fn-scroll"><table class="fn-table" data-source="help_store" data-row-key="id">
+      <thead><tr><th data-field="date">วันที่</th><th data-field="helper">ผู้ช่วย</th><th data-field="receiver">ผู้ได้รับการช่วย</th><th data-field="help_type">ประเภท</th><th data-field="status">สถานะ</th><th data-field="recorded_name">บันทึกโดย</th><th data-field="confirmed_name">ยืนยันโดย</th></tr></thead>
+      <tbody data-draw="histrows"></tbody>
+    </table></div>
+  </section>
+  </div>
+
+  <details class="fn-det" id="method">
+    <summary>วิธีคิดคะแนนและข้อสมมติ</summary>
+    <ul class="fn-rules">
+      <li>แต่ละ KPI ได้ 0–5 คะแนนตามระดับค่าเป้าหมายในตารางหลัก (3 = ค่ามาตรฐาน, 5 = ท้าทาย)</li>
+      <li>คะแนนแผนก = ค่าเฉลี่ยของ KPI ที่มีสถานะ "ได้คะแนน" ไม่ถ่วงน้ำหนัก (น้ำหนักยังกำหนดไม่ครบทุกแผนก) — วิธีเดียวกับชีตสรุป ก.ค. เดิม</li>
+      <li>N/A = ไม่มีเหตุการณ์ให้วัด ไม่นำมาคิด · วิศวกรรม ก.พ.–ก.ย. เดิมลง 0 เพราะไม่มีผู้ทำ KPI จึงตั้งเป็น "ไม่มีรายงาน"</li>
+      <li>คะแนนรายได้ฝ่ายขายคำนวณจากยอดขายจริงเทียบเกณฑ์ทั้งปี ÷ 12 (รอยืนยัน)</li>
+      <li>เดือน ต.ค. ดึงจาก PPTX 5 แผนก (R&amp;D, วางแผน/ผลิต, QA/QC, คลัง, HR) ให้หัวหน้าแผนกตรวจทาน</li>
+    </ul>
+  </details>
+</div>
+
+<script>
+window.FN = window.FN || {};
+FN.num = (v) => (v === '' || v == null || isNaN(+v)) ? null : +v;
+FN.level = (s) => s == null ? 'fn-l0' : s >= 4 ? 'fn-l4' : s >= 3 ? 'fn-l3' : s >= 2 ? 'fn-l2' : 'fn-l1';
+FN.months = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+FN.YEAR_TARGET = 45000000;
+FN.fmtBaht = (v) => v == null ? '—' : (v / 1e6).toFixed(2) + ' ลบ.';
+
+dash.calc('kpi_all', {
+  inputs: ['kpi', 'kpi_store'],
+  title: 'คะแนน KPI รวม (ไฟล์ + กรอกในแอป)',
+  description: 'คะแนนจากไฟล์คะแนน KPI 2026 แล้วแทนที่ด้วยคะแนนที่กรอกในแอปและ HR อนุมัติแล้ว (เดือน+KPI เดียวกัน) · เดือนใหม่ที่มีการอนุมัติ จะสร้างทุก KPI โดยตั้งต้นเป็น "ไม่มีรายงาน"',
+  fn: (kpiFile, appEntries) => {
+    const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const rows = (kpiFile || []).map((r) => ({...r, month_no: String(+r.month_no)}));
+    const idx = new Map(rows.map((r) => [r.month_no + '|' + r.kpi_id, r]));
+    const meta = new Map(); for (const r of rows) if (!meta.has(r.kpi_id)) meta.set(r.kpi_id, r);
+    const approved = (appEntries || []).filter((e) => e && e.state === 'อนุมัติ' && e.kpi_id && +e.month_no >= 1 && +e.month_no <= 12);
+    const known = new Set(rows.map((r) => r.month_no));
+    for (const m of new Set(approved.map((e) => String(+e.month_no)))) {
+      if (known.has(m)) continue;
+      for (const [id, mt] of meta) {
+        const r = {month: MONTHS[+m - 1], month_no: m, dept: mt.dept, kpi_id: id, kpi: mt.kpi, target: mt.target, weight: mt.weight, score: null, status: 'ไม่มีรายงาน', note: 'ยังไม่ได้กรอกในแอป'};
+        rows.push(r); idx.set(m + '|' + id, r);
+      }
+    }
+    for (const e of approved) {
+      const r = idx.get(String(+e.month_no) + '|' + e.kpi_id);
+      if (!r) continue;
+      const scored = e.status_kpi === 'ได้คะแนน' && e.score != null && e.score !== '';
+      r.score = scored ? String(+e.score) : null;
+      r.status = e.status_kpi || 'ไม่มีรายงาน';
+      r.note = 'กรอกในแอป: ' + (e.submitted_name || '-') + ' · อนุมัติ: ' + (e.reviewed_name || '-') + (e.note ? ' · ' + e.note : '');
+    }
+    return rows.sort((a, b) => +a.month_no - +b.month_no || String(a.kpi_id).localeCompare(String(b.kpi_id)));
+  }
+});
+
+dash.calc('kpi_entry_stats', {
+  inputs: ['kpi_store'],
+  title: 'จำนวนคะแนน KPI รอ HR ตรวจ',
+  description: 'นับรายการคะแนน KPI ที่กรอกในแอปตามสถานะการตรวจ',
+  fn: (appEntries) => {
+    const rows = appEntries || [];
+    const c = (s) => rows.filter((e) => e && e.state === s).length;
+    return [{pending: c('รอ HR ตรวจ'), approved: c('อนุมัติ'), returned: c('ส่งกลับ')}];
+  }
+});
+
+dash.calc('dept_month', {
+  inputs: ['kpi_all'],
+  title: 'คะแนนเฉลี่ยรายแผนกรายเดือน',
+  description: 'ค่าเฉลี่ยคะแนน KPI (0–5) เฉพาะสถานะ "ได้คะแนน" แยกแผนกและเดือน',
+  fn: (kpi) => {
+    const g = new Map();
+    for (const r of kpi) {
+      const k = r.dept + '|' + r.month;
+      if (!g.has(k)) g.set(k, {key: k, dept: r.dept, month: r.month, month_no: +r.month_no, sum: 0, n: 0});
+      const s = (r.status === 'ได้คะแนน' && r.score !== '' && r.score != null) ? +r.score : null;
+      if (s != null) { g.get(k).sum += s; g.get(k).n += 1; }
+    }
+    return [...g.values()].map((d) => ({key: d.key, dept: d.dept, month: d.month, month_no: d.month_no, n: d.n, avg: d.n ? Math.round(d.sum / d.n * 100) / 100 : null}));
+  }
+});
+
+dash.calc('company_month', {
+  inputs: ['kpi_all'],
+  title: 'คะแนนเฉลี่ยทั้งบริษัทรายเดือน',
+  description: 'ค่าเฉลี่ยทุก KPI ที่ได้คะแนนในแต่ละเดือน (เต็ม 5)',
+  fn: (kpi) => {
+    const g = new Map();
+    for (const r of kpi) {
+      if (!g.has(r.month)) g.set(r.month, {month: r.month, month_no: +r.month_no, sum: 0, n: 0});
+      if (r.status === 'ได้คะแนน' && r.score !== '' && r.score != null) { g.get(r.month).sum += +r.score; g.get(r.month).n += 1; }
+    }
+    return [...g.values()].sort((a, b) => a.month_no - b.month_no).map((d) => ({month: d.month, month_no: d.month_no, n: d.n, avg: d.n ? Math.round(d.sum / d.n * 100) / 100 : null}));
+  }
+});
+
+dash.calc('headline', {
+  inputs: ['kpi_all', 'sales'],
+  title: 'ตัวเลขสรุปเดือนล่าสุด',
+  description: 'เดือนล่าสุดที่มีคะแนน, คะแนนเฉลี่ยบริษัทเทียบเดือนก่อน, แผนกสูงสุด/ต่ำสุด, ยอดขายสะสมเทียบเป้า 45 ลบ.',
+  fn: (kpi, sales) => {
+    const scored = kpi.filter((r) => r.status === 'ได้คะแนน' && r.score !== '' && r.score != null);
+    const lm = Math.max(...scored.map((r) => +r.month_no));
+    const avg = (rows) => rows.length ? rows.reduce((a, r) => a + +r.score, 0) / rows.length : null;
+    const cur = scored.filter((r) => +r.month_no === lm);
+    const prev = scored.filter((r) => +r.month_no === lm - 1);
+    const byDept = new Map();
+    for (const r of cur) { if (!byDept.has(r.dept)) byDept.set(r.dept, []); byDept.get(r.dept).push(r); }
+    const ds = [...byDept.entries()].map(([d, rows]) => ({d, a: avg(rows)})).sort((a, b) => b.a - a.a);
+    const latestRows = kpi.filter((r) => +r.month_no === lm);
+    const ytd = sales.filter((r) => r.actual_baht !== '' && r.actual_baht != null).reduce((a, r) => a + +r.actual_baht, 0);
+    const salesMonths = sales.filter((r) => r.actual_baht !== '' && r.actual_baht != null).map((r) => +r.month_no);
+    const c = avg(cur), p = avg(prev);
+    return [{
+      latest_month_no: lm,
+      company_latest: c == null ? null : Math.round(c * 100) / 100,
+      company_prev: p == null ? null : Math.round(p * 100) / 100,
+      change: (c == null || p == null) ? null : Math.round((c - p) * 100) / 100,
+      depts_reported: byDept.size,
+      depts_total: new Set(kpi.map((r) => r.dept)).size,
+      top_dept: ds.length ? ds[0].d : null,
+      low_dept: ds.length ? ds[ds.length - 1].d : null,
+      below_count: cur.filter((r) => +r.score < 3).length,
+      missing_count: latestRows.filter((r) => r.status === 'ไม่มีรายงาน' || r.status === 'รอข้อมูล').length,
+      sales_ytd: Math.round(ytd),
+      sales_last_month_no: salesMonths.length ? Math.max(...salesMonths) : null,
+      sales_ytd_pct: Math.round(ytd / 45000000 * 1000) / 10
+    }];
+  }
+});
+
+dash.calc('below', {
+  inputs: ['kpi_all'],
+  title: 'KPI ต่ำกว่าเกณฑ์ เดือนล่าสุด',
+  description: 'KPI ที่ได้ต่ำกว่า 3 คะแนนในเดือนล่าสุดที่มีคะแนน พร้อมจำนวนเดือนที่ต่ำกว่าเกณฑ์ติดต่อกัน',
+  fn: (kpi) => {
+    const scored = kpi.filter((r) => r.status === 'ได้คะแนน' && r.score !== '' && r.score != null);
+    const lm = Math.max(...scored.map((r) => +r.month_no));
+    const byId = d3.group(kpi, (r) => r.kpi_id);
+    return scored.filter((r) => +r.month_no === lm && +r.score < 3).map((r) => {
+      const hist = (byId.get(r.kpi_id) || []).filter((x) => x.status === 'ได้คะแนน' && x.score !== '').sort((a, b) => b.month_no - a.month_no);
+      let streak = 0; for (const h of hist) { if (+h.score < 3) streak++; else break; }
+      return {kpi_id: r.kpi_id, dept: r.dept, kpi: r.kpi, score: +r.score, streak, note: r.note || ''};
+    }).sort((a, b) => a.score - b.score || b.streak - a.streak);
+  }
+});
+
+dash.calc('missing', {
+  inputs: ['kpi_all'],
+  title: 'ข้อมูลที่ยังขาด เดือนล่าสุด',
+  description: 'KPI สถานะ "ไม่มีรายงาน" หรือ "รอข้อมูล" ในเดือนล่าสุดที่มีคะแนน',
+  fn: (kpi) => {
+    const scored = kpi.filter((r) => r.status === 'ได้คะแนน' && r.score !== '' && r.score != null);
+    const lm = Math.max(...scored.map((r) => +r.month_no));
+    return kpi.filter((r) => +r.month_no === lm && (r.status === 'ไม่มีรายงาน' || r.status === 'รอข้อมูล'))
+      .map((r) => ({kpi_id: r.kpi_id, dept: r.dept, kpi: r.kpi, status: r.status, note: r.note || ''}));
+  }
+});
+
+dash.calc('empathy', {
+  inputs: ['help_store'],
+  title: 'คะแนน Empathy รายคน รายเดือน',
+  description: 'เฉพาะรายการสถานะ "ยืนยัน": ในแผนก 1 / ข้ามแผนก 2 / ปัญหาด่วน-คุณภาพ-ความปลอดภัย 3, คู่เดิมนับไม่เกิน 2 ครั้ง/เดือน (เรียงตามวันที่), ช่วยตัวเองไม่นับ, โบนัส = คะแนนแต่ไม่เกิน 5',
+  fn: (helpLog) => {
+    const pts = {'ช่วยงานในแผนก': 1, 'ช่วยงานข้ามแผนก': 2, 'ช่วยแก้ปัญหาด่วน/คุณภาพ/ความปลอดภัย': 3};
+    const norm = (s) => String(s || '').trim();
+    const rows = (helpLog || []).filter((r) => r && r.status === 'ยืนยัน' && r.date)
+      .sort((a, b) => String(a.date).localeCompare(String(b.date)) || String(a.recorded_at || '').localeCompare(String(b.recorded_at || '')));
+    const pair = new Map(), people = new Map();
+    for (const r of rows) {
+      const month = String(r.date).slice(0, 7), helper = norm(r.helper), receiver = norm(r.receiver);
+      if (!helper || helper === receiver) continue;
+      const pk = month + '|' + helper + '>' + receiver;
+      pair.set(pk, (pair.get(pk) || 0) + 1);
+      if (pair.get(pk) > 2) continue;
+      const p = pts[r.help_type] || 0;
+      if (!p) continue;
+      const k = helper + '|' + month;
+      if (!people.has(k)) people.set(k, {key: k, person: helper, dept: r.helper_dept || '', month, count: 0, points: 0});
+      people.get(k).count += 1; people.get(k).points += p;
+    }
+    return [...people.values()].map((d) => ({...d, bonus: Math.min(d.points, 5)}))
+      .sort((a, b) => b.month.localeCompare(a.month) || b.points - a.points);
+  }
+});
+
+dash.calc('help_stats', {
+  inputs: ['help_store'],
+  title: 'สรุปจำนวนรายการช่วยเพื่อน',
+  description: 'จำนวนรายการรอยืนยัน, ยืนยันแล้ว, ไม่อนุมัติ และทั้งหมด',
+  fn: (helpLog) => {
+    const rows = helpLog || [];
+    const c = (s) => rows.filter((r) => r && r.status === s).length;
+    return [{pending: c('รอยืนยัน'), confirmed: c('ยืนยัน'), rejected: c('ไม่อนุมัติ'), total: rows.length}];
+  }
+});
+</script>
+
+<script>
+(function () {
+  const H = () => dash.data('headline');
+  const row = () => { const h = H(); return h.status === 'ok' && h.data && h.data[0] ? h.data[0] : null; };
+  const set = (el, txt) => { el.textContent = txt; };
+  const mname = (n) => n ? FN.months[n - 1] + ' 2026' : '—';
+
+  dash.draw('lm', (el) => { const r = row(); set(el, r ? mname(r.latest_month_no) : '—'); });
+  dash.draw('lmwin', (el) => { const r = row(); set(el, r ? 'เดือน ' + mname(r.latest_month_no) : '—'); });
+  dash.draw('saleswin', (el) => { const r = row(); set(el, r && r.sales_last_month_no ? 'ม.ค.–' + FN.months[r.sales_last_month_no - 1] + ' 2026' : '—'); });
+  dash.draw('clatest', (el) => { const r = row(); set(el, r && r.company_latest != null ? r.company_latest.toFixed(2) : '—'); });
+  dash.draw('t_score', (el) => { const r = row(); set(el, r && r.company_latest != null ? r.company_latest.toFixed(2) + ' / 5' : '—'); });
+  const chg = (el, long) => {
+    const r = row();
+    el.classList.remove('fn-good', 'fn-badc');
+    if (!r || r.change == null) { set(el, '—'); return; }
+    const s = (r.change > 0 ? '+' : '') + r.change.toFixed(2);
+    if (r.change > 0) el.classList.add('fn-good'); else if (r.change < 0) el.classList.add('fn-badc');
+    set(el, long ? s + ' จาก ' + mname(r.latest_month_no - 1) + ' (' + r.company_prev.toFixed(2) + ') · ส่งรายงาน ' + r.depts_reported + '/' + r.depts_total + ' แผนก' : s);
+  };
+  dash.draw('cchg', (el) => chg(el, false));
+  dash.draw('t_chg', (el) => chg(el, true));
+  dash.draw('drep', (el) => { const r = row(); set(el, r ? r.depts_reported + '/' + r.depts_total : '—'); });
+  dash.draw('topd', (el) => { const r = row(); set(el, r && r.top_dept ? r.top_dept : '—'); });
+  dash.draw('lowd', (el) => { const r = row(); set(el, r && r.low_dept ? r.low_dept : '—'); });
+  dash.draw('t_sales', (el) => { const r = row(); set(el, r ? FN.fmtBaht(r.sales_ytd) : '—'); });
+  const pct = (el) => { const r = row(); set(el, r ? r.sales_ytd_pct.toFixed(1) + '%' : '—'); };
+  dash.draw('t_salespct', pct);
+  dash.draw('ytdpct2', pct);
+  dash.draw('t_below', (el) => { const r = row(); set(el, r ? String(r.below_count) : '—'); });
+  dash.draw('t_missing', (el) => { const r = row(); set(el, r ? String(r.missing_count) : '—'); });
+
+  // Heatmap
+  dash.draw('heat', (table) => {
+    const d = dash.data('dept_month');
+    table.replaceChildren();
+    if (d.status === 'error') { const c = table.insertRow().insertCell(); c.textContent = 'โหลดข้อมูลไม่สำเร็จ'; return; }
+    if (d.status !== 'ok' || !d.data) return;
+    const months = [...new Map(d.data.map((r) => [r.month_no, r.month])).entries()].sort((a, b) => a[0] - b[0]);
+    const depts = [...new Set(d.data.map((r) => r.dept))];
+    const idx = new Map(d.data.map((r) => [r.key, r]));
+    const thead = table.createTHead().insertRow();
+    const th0 = document.createElement('th'); th0.textContent = 'แผนก'; thead.appendChild(th0);
+    for (const [, m] of months) { const th = document.createElement('th'); th.className = 'fn-c'; th.textContent = m; thead.appendChild(th); }
+    const tb = table.createTBody();
+    for (const dp of depts) {
+      const tr = tb.insertRow();
+      const c0 = tr.insertCell(); c0.textContent = dp; c0.style.whiteSpace = 'nowrap';
+      for (const [, m] of months) {
+        const r = idx.get(dp + '|' + m);
+        const td = tr.insertCell();
+        td.className = 'fn-c ' + FN.level(r ? r.avg : null);
+        if (r && r.avg != null) {
+          td.textContent = r.avg.toFixed(2);
+          td.setAttribute('data-source', 'dept_month'); td.setAttribute('data-field', 'avg'); td.setAttribute('data-where', 'key=' + r.key.replace(/%/g, '%25').replace(/&/g, '%26').replace(/=/g, '%3D'));
+          td.setAttribute('title', dp + ' ' + m + ': ' + r.avg.toFixed(2) + ' จาก ' + r.n + ' KPI');
+        } else td.textContent = '–';
+      }
+    }
+  });
+
+  function tipBox(el) { const t = document.createElement('div'); t.className = 'fn-tip'; t.hidden = true; el.appendChild(t); return t; }
+  function showTip(el, tip, html, x, y) {
+    tip.replaceChildren(); html.forEach((line, i) => { const s = document.createElement(i ? 'div' : 'strong'); s.textContent = line; tip.appendChild(s); });
+    tip.hidden = false;
+    const w = tip.offsetWidth; const W = el.clientWidth;
+    tip.style.left = Math.max(0, Math.min(W - w, x - w / 2)) + 'px'; tip.style.top = Math.max(0, y - tip.offsetHeight - 10) + 'px';
+  }
+
+  dash.draw('trendchart', (el) => {
+    const d = dash.data('company_month');
+    el.replaceChildren();
+    if (d.status === 'error') { el.textContent = 'โหลดข้อมูลไม่สำเร็จ'; return; }
+    if (d.status !== 'ok' || !d.data) { el.textContent = '—'; return; }
+    const data = d.data.filter((r) => r.avg != null);
+    const W = Math.max(280, el.clientWidth), H = 260, m = {t: 24, r: 16, b: 28, l: 32};
+    const x = d3.scalePoint().domain(d.data.map((r) => r.month)).range([m.l, W - m.r]).padding(0.4);
+    const y = d3.scaleLinear().domain([0, 5]).range([H - m.b, m.t]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img')
+      .attr('aria-label', 'กราฟเส้นคะแนนเฉลี่ยทั้งบริษัทรายเดือน ' + data.map((r) => r.month + ' ' + r.avg).join(', '));
+    svg.append('g').selectAll('line').data([1, 2, 3, 4, 5]).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y)
+      .style('stroke', (v) => v === 3 ? 'var(--cds-chart-reference)' : 'var(--cds-chart-grid)').style('stroke-dasharray', (v) => v === 3 ? '4 3' : null);
+    svg.append('g').selectAll('text').data([0, 1, 2, 3, 4, 5]).join('text').attr('x', m.l - 8).attr('y', (v) => y(v) + 4).attr('text-anchor', 'end').text((v) => v);
+    svg.append('text').attr('x', W - m.r).attr('y', y(3) - 4).attr('text-anchor', 'end').text('ค่ามาตรฐาน 3');
+    svg.append('g').selectAll('text').data(d.data).join('text').attr('x', (r) => x(r.month)).attr('y', H - 8).attr('text-anchor', 'middle').text((r) => r.month);
+    svg.append('path').datum(data).attr('fill', 'none').style('stroke', 'var(--fn-chart)').attr('stroke-width', 2)
+      .attr('d', d3.line().x((r) => x(r.month)).y((r) => y(r.avg)));
+    svg.append('g').selectAll('circle').data(data).join('circle').attr('cx', (r) => x(r.month)).attr('cy', (r) => y(r.avg)).attr('r', 4).style('fill', 'var(--fn-chart)');
+    svg.append('g').selectAll('text').data(data).join('text').attr('x', (r) => x(r.month)).attr('y', (r) => y(r.avg) - 9).attr('text-anchor', 'middle').text((r) => r.avg.toFixed(1));
+    const tip = tipBox(el);
+    svg.append('g').selectAll('rect').data(data).join('rect').attr('x', (r) => x(r.month) - x.step() / 2).attr('width', x.step()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointerenter pointermove', (ev, r) => { const k = el.clientWidth / W; showTip(el, tip, [r.month + ' 2026', 'คะแนนเฉลี่ย ' + r.avg.toFixed(2) + ' / 5', 'จาก ' + r.n + ' KPI ที่ได้คะแนน'], x(r.month) * k, y(r.avg) * k); })
+      .on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  dash.draw('saleschart', (el) => {
+    const d = dash.data('sales');
+    el.replaceChildren();
+    if (d.status === 'error') { el.textContent = 'โหลดข้อมูลไม่สำเร็จ'; return; }
+    if (d.status !== 'ok' || !d.data) { el.textContent = '—'; return; }
+    const data = d.data.map((r) => ({month: r.month, a: FN.num(r.actual_baht), t: FN.num(r.target_baht)}));
+    const W = Math.max(280, el.clientWidth), H = 260, m = {t: 24, r: 16, b: 28, l: 40};
+    const x = d3.scaleBand().domain(data.map((r) => r.month)).range([m.l, W - m.r]).padding(0.25);
+    const ymax = Math.max(4e6, d3.max(data, (r) => Math.max(r.a || 0, r.t || 0)) * 1.1);
+    const y = d3.scaleLinear().domain([0, ymax]).range([H - m.b, m.t]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img')
+      .attr('aria-label', 'กราฟแท่งยอดขายรายเดือนเทียบเป้า 3.75 ล้านบาท');
+    const ticks = y.ticks(4);
+    svg.append('g').selectAll('line').data(ticks).join('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y).attr('y2', y).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(ticks).join('text').attr('x', m.l - 6).attr('y', (v) => y(v) + 4).attr('text-anchor', 'end').text((v) => (v / 1e6).toFixed(0) + 'M');
+    svg.append('g').selectAll('text').data(data).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', H - 8).attr('text-anchor', 'middle').text((r) => r.month);
+    svg.append('g').selectAll('rect').data(data.filter((r) => r.a != null)).join('rect')
+      .attr('x', (r) => x(r.month)).attr('width', x.bandwidth()).attr('y', (r) => y(r.a)).attr('height', (r) => y(0) - y(r.a))
+      .style('fill', 'var(--fn-chart)').style('opacity', (r) => r.a >= r.t ? 1 : 0.75).attr('rx', 2);
+    svg.append('g').selectAll('text').data(data.filter((r) => r.a != null)).join('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', (r) => y(r.a) - 4).attr('text-anchor', 'middle').text((r) => (r.a / 1e6).toFixed(1));
+    const t = data[0].t;
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(t)).attr('y2', y(t)).style('stroke', 'var(--cds-chart-status-critical)').style('stroke-dasharray', '5 4').attr('stroke-width', 1.5);
+    svg.append('text').attr('x', W - m.r).attr('y', y(t) - 5).attr('text-anchor', 'end').text('เป้า 3.75M');
+    const tip = tipBox(el);
+    svg.append('g').selectAll('rect').data(data).join('rect').attr('x', (r) => x(r.month)).attr('width', x.bandwidth()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointerenter pointermove', (ev, r) => { const k = el.clientWidth / W; showTip(el, tip, [r.month + ' 2026', r.a == null ? 'ยังไม่มีข้อมูล' : 'ยอดขาย ' + d3.format(',.0f')(r.a) + ' บาท', r.a == null ? '' : Math.round(r.a / r.t * 100) + '% ของเป้ารายเดือน'], (x(r.month) + x.bandwidth() / 2) * k, y(r.a || 0) * k); })
+      .on('pointerleave', () => { tip.hidden = true; });
+  });
+
+  function rowsInto(tbody, id, cols, empty) {
+    const d = dash.data(id);
+    tbody.replaceChildren();
+    const msg = (txt) => { const c = tbody.insertRow().insertCell(); c.colSpan = cols.length; c.className = 'fn-empty'; c.textContent = txt; };
+    if (d.status === 'error') return msg('โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok' || !d.data) return msg('—');
+    if (!d.data.length) return msg(empty);
+    for (const r of d.data) {
+      const tr = tbody.insertRow();
+      for (const c of cols) { const td = tr.insertCell(); const v = r[c]; td.textContent = v == null ? '' : String(v); if (c === 'score') td.className = FN.level(+v); }
+    }
+  }
+  dash.draw('belowrows', (tb) => rowsInto(tb, 'below', ['dept', 'kpi', 'score', 'streak', 'note'], 'ไม่มี KPI ต่ำกว่าเกณฑ์'));
+  dash.draw('missingrows', (tb) => rowsInto(tb, 'missing', ['dept', 'kpi', 'status', 'note'], 'ข้อมูลครบทุกตัว'));
+  // ---------- Help log app ----------
+  const HELP_PATH = 'data/team/help_log';
+  FN.myId = null; FN.emonth = null;
+  const show = (sel, on) => document.querySelectorAll(sel).forEach((e) => { e.hidden = !on; });
+  const myName = () => { const i = document.querySelector('#help-form input[name="me_name"]'); return i ? i.value.trim() : ''; };
+  const helpRows = () => { const d = dash.data('help_store'); return {d, rows: d.status === 'ok' && Array.isArray(d.data) ? d.data : []}; };
+  const STATUS_CLS = {'รอยืนยัน': 'fn-st-wait', 'ยืนยัน': 'fn-st-yes', 'ไม่อนุมัติ': 'fn-st-no'};
+
+  dash.draw('names', (dl) => {
+    const {rows} = helpRows();
+    const names = [...new Set(rows.flatMap((r) => [r.helper, r.receiver]).map((s) => String(s || '').trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'th'));
+    dl.replaceChildren(...names.map((n) => { const o = document.createElement('option'); o.value = n; return o; }));
+  });
+
+  dash.draw('pendcount', (el) => { const d = dash.data('help_stats'); set(el, d.status === 'ok' && d.data && d.data[0] ? String(d.data[0].pending) : '—'); });
+
+  async function act(id, status) {
+    show('#msg-act', false); show('#msg-name', false);
+    const me = myName();
+    if (status !== 'delete' && !me) { show('#msg-name', true); return; }
+    try {
+      const db = await claude.use('db');
+      if (!db) throw new Error('no db');
+      const ref = db.doc(HELP_PATH + '/' + id);
+      if (status === 'delete') await ref.delete();
+      else await ref.update({status, confirmed_by: FN.myId, confirmed_name: me, confirmed_at: new Date().toISOString()});
+    } catch (e) { show('#msg-act', true); }
+  }
+
+  dash.draw('pendrows', (tb) => {
+    const {d, rows} = helpRows();
+    tb.replaceChildren();
+    const msg = (t) => { const c = tb.insertRow().insertCell(); c.colSpan = 7; c.className = 'fn-empty'; c.textContent = t; };
+    if (d.status === 'error') return msg('โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok') return msg('—');
+    const pend = rows.filter((r) => r.status === 'รอยืนยัน').sort((a, b) => String(a.date).localeCompare(String(b.date)));
+    if (!pend.length) return msg('ไม่มีรายการรอยืนยัน — เพิ่มรายการแรกได้จากฟอร์มด้านบน');
+    for (const r of pend) {
+      const tr = tb.insertRow(); tr.dataset.key = r.id;
+      for (const c of ['date', 'helper', 'receiver', 'help_type', 'detail', 'recorded_name']) tr.insertCell().textContent = r[c] == null ? '' : String(r[c]);
+      const td = tr.insertCell(); td.style.whiteSpace = 'nowrap';
+      const own = FN.myId && r.recorded_by === FN.myId;
+      const mk = (label, st, dis, tip) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'fn-btn2'; b.textContent = label; b.disabled = !!dis; if (tip) b.title = tip; b.addEventListener('click', () => { b.disabled = true; act(r.id, st); }); td.appendChild(b); };
+      mk('ยืนยัน', 'ยืนยัน', own, own ? 'ผู้บันทึกยืนยันรายการของตัวเองไม่ได้' : '');
+      mk('ไม่อนุมัติ', 'ไม่อนุมัติ', own, own ? 'ผู้บันทึกยืนยันรายการของตัวเองไม่ได้' : '');
+      if (own) mk('ลบ', 'delete', false, 'ลบรายการที่คุณบันทึกผิด');
+    }
+  });
+
+  dash.draw('emsel', (sel) => {
+    const d = dash.data('empathy');
+    const months = d.status === 'ok' && Array.isArray(d.data) ? [...new Set(d.data.map((r) => r.month))].sort().reverse() : [];
+    if (!FN.emonth || !months.includes(FN.emonth)) FN.emonth = months[0] || null;
+    sel.replaceChildren(...(months.length ? months.map((m) => new Option(m, m)) : [new Option('ยังไม่มีข้อมูล', '')]));
+    sel.value = FN.emonth || '';
+    sel.onchange = () => { FN.emonth = sel.value || null; dash.draw('emprows'); };
+  });
+
+  dash.draw('emprows', (tb) => {
+    const d = dash.data('empathy');
+    tb.replaceChildren();
+    const msg = (t) => { const c = tb.insertRow().insertCell(); c.colSpan = 5; c.className = 'fn-empty'; c.textContent = t; };
+    if (d.status === 'error') return msg('โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok' || !Array.isArray(d.data)) return msg('—');
+    const rows = d.data.filter((r) => r.month === (FN.emonth || (d.data[0] && d.data[0].month)));
+    if (!rows.length) return msg('ยังไม่มีรายการที่ยืนยันแล้ว');
+    for (const r of rows) {
+      const tr = tb.insertRow(); tr.dataset.key = r.key;
+      for (const c of ['person', 'dept', 'count', 'points', 'bonus']) tr.insertCell().textContent = String(r[c]);
+    }
+  });
+
+  dash.draw('histrows', (tb) => {
+    const {d, rows} = helpRows();
+    tb.replaceChildren();
+    const msg = (t) => { const c = tb.insertRow().insertCell(); c.colSpan = 7; c.className = 'fn-empty'; c.textContent = t; };
+    if (d.status === 'error') return msg('โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok') return msg('—');
+    if (!rows.length) return msg('ยังไม่มีรายการ');
+    const list = [...rows].sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.recorded_at || '').localeCompare(String(a.recorded_at || ''))).slice(0, 50);
+    for (const r of list) {
+      const tr = tb.insertRow(); tr.dataset.key = r.id;
+      for (const c of ['date', 'helper', 'receiver', 'help_type', 'status', 'recorded_name', 'confirmed_name']) {
+        const td = tr.insertCell(); td.textContent = r[c] == null ? '' : String(r[c]);
+        if (c === 'status') td.className = STATUS_CLS[r.status] || '';
+      }
+    }
+  });
+})();
+
+// ---------- Tabs, form and permissions (listen / set attributes only) ----------
+(function () {
+  const panels = () => document.querySelectorAll('.fn-panel');
+  function showTab(name, link) {
+    document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+    panels().forEach((p) => { p.hidden = p.id !== name; });
+    if (link) { try { dash.setLink(name); } catch (e) {} }
+  }
+  document.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab, true)));
+  const startTab = location.hash.slice(1);
+  if (startTab === 'app' || startTab === 'entry') showTab(startTab, false);
+  let printed = null;
+  window.addEventListener('beforeprint', () => { if (printed === null) { printed = [...panels()].map((p) => p.hidden); panels().forEach((p) => { p.hidden = false; }); } });
+  window.addEventListener('afterprint', () => { if (printed) { panels().forEach((p, i) => { p.hidden = printed[i]; }); printed = null; } });
+
+  const form = document.getElementById('help-form');
+  if (!form) return;
+  const q = (n) => form.querySelector('[name="' + n + '"]');
+  const show = (id, on) => document.querySelectorAll('#' + id).forEach((e) => { e.hidden = !on; });
+  const d = new Date(); const pad = (n) => String(n).padStart(2, '0');
+  if (q('date')) { q('date').value = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  try { const saved = localStorage.getItem('fn_help_me'); if (saved && q('me_name')) q('me_name').value = saved; } catch (e) {}
+
+  claude.use('user').then(async (user) => {
+    if (!user) return;
+    try { FN.myId = await user.id(); } catch (e) {}
+    const can = user.can ? user.can('data.write') : null;
+    if (can === false) { show('ro-note', true); const b = document.getElementById('save-btn'); if (b) b.disabled = true; }
+    dash.draw('pendrows');
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ['msg-ok', 'msg-err', 'msg-self'].forEach((id) => show(id, false));
+    const v = (n) => (q(n) ? q(n).value.trim() : '');
+    const row = {date: v('date'), helper: v('helper'), helper_dept: v('helper_dept'), receiver: v('receiver'), receiver_dept: v('receiver_dept'), help_type: v('help_type'), detail: v('detail')};
+    const me = v('me_name');
+    if (!me || !row.date || !row.helper || !row.receiver || !row.detail) { form.reportValidity(); return; }
+    if (row.helper === row.receiver) { show('msg-self', true); return; }
+    const btn = document.getElementById('save-btn'); if (btn) btn.disabled = true;
+    try {
+      const [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+      if (!db) throw new Error('no db');
+      const uid = user ? await user.id() : null;
+      await db.collection('data/team/help_log').add({...row, month: row.date.slice(0, 7), status: 'รอยืนยัน', recorded_by: uid, recorded_name: me, recorded_at: new Date().toISOString(), confirmed_by: null, confirmed_name: null, confirmed_at: null});
+      ['helper', 'receiver', 'detail'].forEach((n) => { if (q(n)) q(n).value = ''; });
+      try { localStorage.setItem('fn_help_me', me); } catch (e2) {}
+      show('msg-ok', true);
+    } catch (err) { show('msg-err', true); }
+    finally { if (btn) btn.disabled = false; }
+  });
+})();
+</script>
+
+<script>
+// ---------- KPI entry, HR approval, audit, detail table ----------
+(function () {
+  const MONTHS = FN.months;
+  const ENTRY_PATH = 'data/team/kpi_entries', AUDIT_PATH = 'data/team/kpi_audit';
+  const STATUSES = ['ได้คะแนน', 'N/A', 'ไม่มีรายงาน', 'รอข้อมูล'];
+  const STATE_CLS = {'รอ HR ตรวจ': 'fn-st-wait', 'อนุมัติ': 'fn-st-yes', 'ส่งกลับ': 'fn-st-no'};
+  FN.entryNonce = 0;
+  const showId = (id, on) => document.querySelectorAll('#' + id).forEach((e) => { e.hidden = !on; });
+  const val = (id) => { const e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  const rowsOf = (id) => { const d = dash.data(id); return {d, rows: d.status === 'ok' && Array.isArray(d.data) ? d.data : []}; };
+  const docId = (m, id) => '2026-' + String(m).padStart(2, '0') + '_' + id;
+  const cell = (tr, txt) => { const td = tr.insertCell(); td.textContent = txt == null ? '' : String(txt); return td; };
+  const msgRow = (tb, cols, t) => { const c = tb.insertRow().insertCell(); c.colSpan = cols; c.className = 'fn-empty'; c.textContent = t; };
+  const numTxt = (v) => (v == null || v === '') ? '–' : String(v);
+
+  async function audit(db, action, e, byName, note) {
+    try {
+      await db.collection(AUDIT_PATH).add({at: new Date().toISOString(), action, entry_id: docId(e.month_no, e.kpi_id), month: e.month || '', dept: e.dept || '', kpi_id: e.kpi_id || '', score: e.score == null ? null : e.score, status_kpi: e.status_kpi || null, by: FN.myId || null, by_name: byName || '', note: note || ''});
+    } catch (err) {}
+  }
+
+  dash.draw('kpipend', (el) => { const d = dash.data('kpi_entry_stats'); el.textContent = d.status === 'ok' && d.data && d.data[0] ? String(d.data[0].pending) : '—'; });
+  dash.draw('kpipendtab', (el) => { const d = dash.data('kpi_entry_stats'); const n = d.status === 'ok' && d.data && d.data[0] ? d.data[0].pending : 0; el.textContent = n ? String(n) : ''; });
+
+  // Detail table (KPI tab)
+  dash.draw('detailrows', (tb) => {
+    const {d, rows} = rowsOf('kpi_all');
+    tb.replaceChildren();
+    if (d.status === 'error') return msgRow(tb, 7, 'โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok') return msgRow(tb, 7, '—');
+    let m = val('f-month') || 'latest';
+    if (m === 'latest') { const sc = rows.filter((r) => r.status === 'ได้คะแนน' && r.score != null && r.score !== ''); m = sc.length ? String(Math.max(...sc.map((r) => +r.month_no))) : ''; }
+    const dp = val('f-dept');
+    const list = rows.filter((r) => String(+r.month_no) === m && (!dp || r.dept === dp))
+      .sort((a, b) => String(a.dept).localeCompare(String(b.dept), 'th') || String(a.kpi_id).localeCompare(String(b.kpi_id)));
+    if (!list.length) return msgRow(tb, 7, 'ไม่มีข้อมูลในเดือน/แผนกที่เลือก');
+    for (const r of list) {
+      const tr = tb.insertRow(); tr.dataset.key = String(r.month_no) + ',' + r.kpi_id;
+      cell(tr, r.month); cell(tr, r.dept); cell(tr, r.kpi); cell(tr, r.target);
+      const s = cell(tr, numTxt(r.score)); s.className = FN.level(r.score == null || r.score === '' ? null : +r.score);
+      cell(tr, r.status); cell(tr, r.note);
+    }
+  });
+
+  // Entry form rows (rebuilt only when month/department changes, so typing is never wiped)
+  dash.draw('kpientry', (tb) => {
+    const all = rowsOf('kpi_all'), st = rowsOf('kpi_store');
+    if (all.d.status === 'error' || st.d.status === 'error') { tb.replaceChildren(); tb.dataset.k = ''; return msgRow(tb, 6, 'โหลดข้อมูลไม่สำเร็จ'); }
+    if (all.d.status !== 'ok' || st.d.status !== 'ok') { if (!tb.children.length) msgRow(tb, 6, '—'); return; }
+    const m = +(val('e-month') || 0), dp = val('e-dept');
+    const key = m + '|' + dp + '|' + FN.entryNonce;
+    if (tb.dataset.k === key && tb.children.length) return;
+    tb.replaceChildren(); tb.dataset.k = key;
+    const meta = new Map(); for (const r of all.rows) if (r.dept === dp && !meta.has(r.kpi_id)) meta.set(r.kpi_id, r);
+    if (!meta.size) return msgRow(tb, 6, 'ยังไม่มี KPI ของแผนกนี้ในตารางหลัก');
+    const cur = new Map(all.rows.filter((r) => +r.month_no === m).map((r) => [r.kpi_id, r]));
+    const ent = new Map(st.rows.filter((e) => +e.month_no === m).map((e) => [e.kpi_id, e]));
+    for (const [id, r] of meta) {
+      const e = ent.get(id), c = cur.get(id);
+      const tr = tb.insertRow(); tr.dataset.kpi = id; tr.dataset.dept = r.dept; tr.dataset.name = r.kpi;
+      cell(tr, r.kpi); cell(tr, r.target);
+      const srcScore = e ? e.score : (c ? c.score : null);
+      const srcStatus = e ? e.status_kpi : (c ? c.status : 'ไม่มีรายงาน');
+      const sIn = document.createElement('input'); sIn.type = 'number'; sIn.min = '0'; sIn.max = '5'; sIn.step = '0.5'; sIn.className = 'fn-in fn-in-s'; sIn.setAttribute('aria-label', 'คะแนน ' + r.kpi);
+      if (srcScore != null && srcScore !== '') sIn.value = String(+srcScore);
+      tr.insertCell().appendChild(sIn);
+      const sel = document.createElement('select'); sel.className = 'dash-select'; sel.setAttribute('aria-label', 'สถานะ ' + r.kpi);
+      STATUSES.forEach((s) => sel.appendChild(new Option(s, s)));
+      sel.value = STATUSES.includes(srcStatus) ? srcStatus : 'ไม่มีรายงาน';
+      tr.insertCell().appendChild(sel);
+      const nIn = document.createElement('input'); nIn.className = 'fn-in'; nIn.maxLength = 200; nIn.placeholder = 'เช่น ผลจริง 96%'; nIn.value = e && e.note ? e.note : '';
+      tr.insertCell().appendChild(nIn);
+      sIn.addEventListener('input', () => { if (sIn.value !== '') sel.value = 'ได้คะแนน'; });
+      const stTd = tr.insertCell();
+      if (e) { stTd.textContent = e.state === 'ส่งกลับ' ? 'ส่งกลับ' + (e.review_note ? ': ' + e.review_note : '') : e.state; stTd.className = STATE_CLS[e.state] || ''; }
+      else stTd.textContent = c && c.status === 'ได้คะแนน' ? 'มีคะแนนจากไฟล์' : 'ยังไม่ส่ง';
+    }
+  });
+
+  async function review(e, state) {
+    showId('r-msg-name', false); showId('r-msg-err', false);
+    const name = val('r-name');
+    if (!name) { showId('r-msg-name', true); return false; }
+    try {
+      const db = await claude.use('db'); if (!db) throw new Error('no db');
+      const note = state === 'ส่งกลับ' ? val('r-note') : '';
+      await db.doc(ENTRY_PATH + '/' + e.id).update({state, reviewed_by: FN.myId || null, reviewed_name: name, reviewed_at: new Date().toISOString(), review_note: note || null});
+      await audit(db, state === 'อนุมัติ' ? 'HR อนุมัติ' : 'HR ส่งกลับ', e, name, note);
+      try { localStorage.setItem('fn_review_me', name); } catch (x) {}
+      return true;
+    } catch (err) { showId('r-msg-err', true); return false; }
+  }
+
+  dash.draw('apprrows', (tb) => {
+    const {d, rows} = rowsOf('kpi_store');
+    tb.replaceChildren();
+    if (d.status === 'error') return msgRow(tb, 8, 'โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok') return msgRow(tb, 8, '—');
+    const pend = rows.filter((e) => e.state === 'รอ HR ตรวจ')
+      .sort((a, b) => (+a.month_no - +b.month_no) || String(a.dept).localeCompare(String(b.dept), 'th') || String(a.kpi_id).localeCompare(String(b.kpi_id)));
+    if (!pend.length) return msgRow(tb, 8, 'ไม่มีรายการรอตรวจ');
+    for (const e of pend) {
+      const tr = tb.insertRow(); tr.dataset.key = e.id;
+      cell(tr, e.month); cell(tr, e.dept); cell(tr, e.kpi);
+      const s = cell(tr, numTxt(e.score)); s.className = FN.level(e.score == null || e.score === '' ? null : +e.score);
+      cell(tr, e.status_kpi); cell(tr, e.note); cell(tr, e.submitted_name);
+      const td = tr.insertCell(); td.style.whiteSpace = 'nowrap';
+      const own = FN.myId && e.submitted_by === FN.myId;
+      for (const [label, state] of [['อนุมัติ', 'อนุมัติ'], ['ส่งกลับ', 'ส่งกลับ']]) {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'fn-btn2'; b.textContent = label; b.disabled = !!own;
+        if (own) b.title = 'ผู้ส่งอนุมัติรายการของตัวเองไม่ได้';
+        b.addEventListener('click', async () => { b.disabled = true; const ok = await review(e, state); if (!ok) b.disabled = false; });
+        td.appendChild(b);
+      }
+    }
+  });
+
+  dash.draw('auditrows', (tb) => {
+    const {d, rows} = rowsOf('kpi_audit');
+    tb.replaceChildren();
+    if (d.status === 'error') return msgRow(tb, 8, 'โหลดข้อมูลไม่สำเร็จ');
+    if (d.status !== 'ok') return msgRow(tb, 8, '—');
+    if (!rows.length) return msgRow(tb, 8, 'ยังไม่มีประวัติ');
+    const fmt = (s) => { const t = new Date(s); return isNaN(t) ? '' : t.toLocaleString('th-TH', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'}); };
+    for (const a of [...rows].sort((x, y) => String(y.at).localeCompare(String(x.at))).slice(0, 30)) {
+      const tr = tb.insertRow(); tr.dataset.key = a.id;
+      cell(tr, fmt(a.at)); cell(tr, a.action); cell(tr, a.month); cell(tr, a.dept); cell(tr, a.kpi_id); cell(tr, numTxt(a.score)); cell(tr, a.by_name); cell(tr, a.note);
+    }
+  });
+
+  // ---- listeners and defaults (outside drawings: values, hidden, disabled only) ----
+  const setVal = (id, v) => { const e = document.getElementById(id); if (e && v != null) e.value = v; };
+  const now = new Date();
+  setVal('e-month', String(now.getMonth() === 0 ? 12 : now.getMonth()));
+  try { setVal('e-name', localStorage.getItem('fn_help_me')); setVal('r-name', localStorage.getItem('fn_review_me') || localStorage.getItem('fn_help_me')); } catch (e) {}
+  ['e-month', 'e-dept'].forEach((id) => { const e = document.getElementById(id); if (e) e.addEventListener('change', () => dash.draw('kpientry')); });
+  ['f-month', 'f-dept'].forEach((id) => { const e = document.getElementById(id); if (e) e.addEventListener('change', () => dash.draw('detailrows')); });
+
+  claude.use('user').then(async (user) => {
+    if (!user) return;
+    try { if (!FN.myId) FN.myId = await user.id(); } catch (e) {}
+    const can = user.can ? user.can('data.write') : null;
+    if (can === false) {
+      showId('e-ro', true);
+      ['e-submit', 'r-all'].forEach((id) => { const b = document.getElementById(id); if (b) b.disabled = true; });
+    }
+    dash.draw('apprrows');
+  });
+
+  const sub = document.getElementById('e-submit');
+  if (sub) sub.addEventListener('click', async () => {
+    ['e-ok', 'e-err', 'e-name-msg', 'e-valid'].forEach((i) => showId(i, false));
+    const name = val('e-name');
+    if (!name) { showId('e-name-msg', true); return; }
+    const m = +val('e-month');
+    const trs = [...document.querySelectorAll('tbody[data-draw="kpientry"] tr[data-kpi]')];
+    if (!trs.length || !m) return;
+    const items = [];
+    for (const tr of trs) {
+      const sIn = tr.querySelector('input[type="number"]'), sel = tr.querySelector('select'), nIn = tr.querySelector('input:not([type="number"])');
+      const status = sel ? sel.value : 'ไม่มีรายงาน';
+      let score = sIn && sIn.value !== '' ? Number(sIn.value) : null;
+      if (status === 'ได้คะแนน' && (score == null || isNaN(score) || score < 0 || score > 5)) { showId('e-valid', true); if (sIn) sIn.focus(); return; }
+      if (status !== 'ได้คะแนน') score = null;
+      items.push({month_no: m, month: MONTHS[m - 1], kpi_id: tr.dataset.kpi, dept: tr.dataset.dept, kpi: tr.dataset.name, score, status_kpi: status, note: nIn ? nIn.value.trim() : ''});
+    }
+    sub.disabled = true;
+    try {
+      const db = await claude.use('db'); if (!db) throw new Error('no db');
+      const at = new Date().toISOString();
+      for (const it of items) {
+        const row = {...it, state: 'รอ HR ตรวจ', submitted_by: FN.myId || null, submitted_name: name, submitted_at: at, reviewed_by: null, reviewed_name: null, reviewed_at: null, review_note: null};
+        await db.doc(ENTRY_PATH + '/' + docId(m, it.kpi_id)).set(row);
+        await audit(db, 'ส่งให้ HR ตรวจ', row, name, it.note);
+      }
+      try { localStorage.setItem('fn_help_me', name); } catch (x) {}
+      showId('e-ok', true);
+      FN.entryNonce += 1; dash.draw('kpientry');
+    } catch (err) { showId('e-err', true); }
+    finally { sub.disabled = false; }
+  });
+
+  const all = document.getElementById('r-all');
+  if (all) all.addEventListener('click', async () => {
+    const {rows} = rowsOf('kpi_store');
+    const todo = rows.filter((e) => e.state === 'รอ HR ตรวจ' && !(FN.myId && e.submitted_by === FN.myId));
+    if (!todo.length) return;
+    all.disabled = true;
+    for (const e of todo) { const ok = await review(e, 'อนุมัติ'); if (!ok) break; }
+    all.disabled = false;
+  });
+})();
+</script>
