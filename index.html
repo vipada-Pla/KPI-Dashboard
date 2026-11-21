@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI & Empathy App 2026 — Foodle Noodle</title>
+<link rel="icon" href="foodle-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--green:#3C672E;--green2:#4A7545;--lime:#92D050;--chart:#6BA77A;--ink:#24402A;--muted:#5B7360;--line:#E6EFE7;--sage:#F5F8F5;--mint2:#C4E8CF;--butter:#FFF3C7;--rose:#FBDADA;--pink:#FFDDE8;--pink2:#FFC6D9;--pinkink:#A83E68;--bad:#C0453F;--ok:#2E8B57;--r:18px}
+*{box-sizing:border-box}
+body{margin:0;background:#FBFDFB;color:var(--ink);font-family:'Prompt',system-ui,sans-serif;font-weight:300;line-height:1.5}
+b,strong{font-weight:500}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3,.kanit{font-family:'Kanit',system-ui,sans-serif}
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:26px 210px 22px 26px;background:linear-gradient(120deg,#F4FBF6 0%,#fff 55%,#FFF5F8 100%);border:1px solid var(--line);box-shadow:0 4px 18px rgba(36,64,42,.05)}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:rgba(196,232,207,.35)}
+.hero::before{content:"";position:absolute;left:-40px;bottom:-70px;width:180px;height:180px;border-radius:50%;background:rgba(255,198,217,.25)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:12px;position:relative;z-index:1;flex-wrap:wrap}
+.brand img{width:56px;background:#fff;border-radius:14px;padding:6px;box-shadow:0 4px 12px rgba(60,103,46,.12)}
+.chip{padding:4px 12px;border-radius:999px;background:#fff;color:var(--pinkink);font-weight:500;font-size:12px;letter-spacing:.5px;box-shadow:0 2px 8px rgba(60,103,46,.08)}
+.userbox{margin-left:auto;display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.hero h1{font-weight:600;font-size:clamp(1.5rem,3.2vw,2.2rem);line-height:1.15;color:#2F5427;margin:0;position:relative;z-index:1}
+.hero .sub{color:#4E6B52;font-size:13px;margin:4px 0 0;position:relative;z-index:1}
+.take{position:relative;z-index:1;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:14px;font-size:15px}
+.take b{color:#2F5427}
+.mascot{position:absolute;right:26px;top:50%;margin-top:-80px;width:160px;height:160px;border-radius:50%;background:#F7FBF8;border:1px solid var(--line);display:grid;place-items:center;z-index:1;box-shadow:0 6px 18px rgba(36,64,42,.08)}
+.mascot svg{width:128px}
+.mascot span{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--pink2);color:var(--pinkink);font-family:'Kanit';font-weight:500;font-size:12px;padding:3px 12px;border-radius:999px}
+@media (prefers-reduced-motion:no-preference){.mascot svg{animation:bob 3.2s ease-in-out infinite}.steam{animation:steam 2.4s ease-in-out infinite}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+@keyframes steam{0%,100%{opacity:.35}50%{opacity:.9}}
+@media (max-width:760px){.hero{padding:20px}.mascot{position:relative;right:auto;top:auto;margin:16px 0 6px;width:110px;height:110px}.mascot svg{width:88px}}
+.tabs{display:flex;flex-wrap:wrap;background:var(--sage);border:1px solid var(--line);border-radius:999px;padding:5px;gap:4px;width:fit-content;max-width:100%}
+.tab{background:none;border:1px solid transparent;border-radius:999px;padding:9px 18px;font:inherit;font-family:'Kanit';color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:#fff;color:#2F5427;font-weight:500;border-color:var(--line);box-shadow:0 2px 8px rgba(36,64,42,.08)}
+.badge{display:inline-block;min-width:18px;margin-left:4px;padding:0 6px;border-radius:999px;background:#F7B3C8;color:#7A2448;font-size:11px;line-height:18px;text-align:center}
+.panel{display:flex;flex-direction:column;gap:26px}
+.panel[hidden]{display:none}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;position:relative;box-shadow:0 2px 10px rgba(36,64,42,.04)}
+.card::before{content:"";position:absolute;left:20px;top:0;width:48px;height:5px;border-radius:0 0 4px 4px;background:#9FD6AE}
+.card:nth-child(2)::before{background:#A9D3F2}.card:nth-child(3)::before{background:#F7B3C8}.card:nth-child(4)::before{background:#C9BDF2}
+.card h3{margin:0;font-weight:500;font-size:15px}
+.win,.note{color:#55695A;font-size:12px}
+.big{font-family:'Kanit';font-weight:600;color:#2F5427;font-size:2.3rem;line-height:1.2;margin-top:6px}
+.good{color:var(--ok)}.badc{color:var(--bad)}
+.sec{display:flex;flex-direction:column;gap:10px}
+.sec h2{margin:0;font-weight:500;font-size:1.15rem;display:flex;align-items:center;gap:8px}
+.sec h2::before{content:"";width:8px;height:8px;border-radius:50%;background:#F29DB9;flex:none}
+.desc{color:var(--muted);font-size:12px;margin:0}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{background:var(--sage);color:#2F5427;font-family:'Kanit';font-weight:500;padding:10px;text-align:left;white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.heat td.c,.heat th.c{text-align:center;min-width:46px}
+.heat td.c{border-radius:10px;border:3px solid #fff}
+.l4{background:#CDEBD5}.l3{background:#EAF5DF}.l2{background:#FFF1C9}.l1{background:#FADADA}.l0{color:#9AA79C}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:6px;vertical-align:-2px;margin-right:6px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px}
+.chart{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:10px;position:relative;min-height:260px}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:#6B7B6E;font-size:11px;font-family:'Prompt'}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.bar label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#55695A}
+input,select,textarea{font:inherit;font-size:13px;border:1px solid #DCE7DD;border-radius:10px;padding:7px 9px;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pink2);border-color:#E886A8}
+textarea{min-height:64px;resize:vertical;width:100%}
+.btn{font:inherit;font-family:'Kanit';font-weight:500;border-radius:999px;background:var(--green);border:1px solid var(--green);color:#fff;padding:9px 24px;cursor:pointer;box-shadow:0 6px 16px rgba(60,103,46,.22)}
+.btn2{font:inherit;font-size:12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:4px 12px;cursor:pointer;margin:0 4px 4px 0}
+.btn2:hover:not(:disabled){background:var(--pink);border-color:#E886A8}
+button:disabled{opacity:.45;cursor:not-allowed}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 8px 24px rgba(60,103,46,.06)}
+.form label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:#55695A}
+.wide{grid-column:1/-1}
+.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.msg{font-size:13px}.msg.ok{color:var(--ok)}.msg.err{color:var(--bad)}
+.st-wait{background:var(--butter);color:#7A5B00;border-radius:999px}
+.st-yes{background:var(--mint2);border-radius:999px}
+.st-no{background:var(--rose);color:#8A2F2B;border-radius:999px}
+.empty{color:#8A988C;font-size:13px;padding:14px 10px}
+.notice{background:var(--butter);color:#5E4A00;border-radius:14px;padding:10px 14px;font-size:13px}
+.cheer{display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#F7FBF8;border:1px solid var(--line);border-radius:var(--r);padding:14px 18px}
+.cheer svg{width:200px;max-width:100%;background:#fff;border-radius:16px}
+.cheer p{margin:0;flex:1;min-width:200px;font-size:15px}
+.cheer strong{font-family:'Kanit';color:#2F5427;font-size:1.1rem;display:block}
+.rules{margin:0;padding-left:1.2rem;font-size:13px;line-height:1.8}
+details{background:#F7FBF8;border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;font-size:13px}
+summary{cursor:pointer;font-weight:500}
+.login{max-width:440px;margin:8vh auto;background:#fff;border:1px solid var(--line);border-radius:24px;padding:30px;text-align:center;box-shadow:0 10px 30px rgba(36,64,42,.08)}
+.login img{width:80px}
+.login input{width:100%;margin:14px 0;font-size:15px;padding:10px 12px}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.1);border-radius:10px;padding:6px 10px;font-size:12px;white-space:nowrap;z-index:5}
+.loading{color:var(--muted);text-align:center;padding:40px}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"><div class="loading">กำลังโหลด…</div></div>
+
+<script>
+const SUPABASE_URL = 'https://yfmjbcdvrzvpilkqtouv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_KBAG7qQFmSyelhtGTLyPQg_maoIU93F';
+const YEAR = 2026;
+const MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const STATUSES = ['ได้คะแนน','N/A','ไม่มีรายงาน','รอข้อมูล'];
+const HELP_TYPES = [['ช่วยงานในแผนก',1],['ช่วยงานข้ามแผนก',2],['ช่วยแก้ปัญหาด่วน/คุณภาพ/ความปลอดภัย',3]];
+const HELP_DEPTS = ['วางแผน/ผลิต','QA/QC','คลังสินค้า','วิศวกรรม/ซ่อมบำรุง','ซัพพลายเชน/จัดซื้อ','ฝ่ายขาย/แอดมินขาย','R&D','HR','บัญชี'];
+const ROLES = {viewer:'ดูอย่างเดียว', editor:'หัวหน้าแผนก (กรอก/ยืนยัน)', hr:'HR (อนุมัติ KPI)', admin:'ผู้ดูแลระบบ'};
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const S = {me: null, master: [], scores: [], sales: [], help: [], audit: [], users: [], tab: 'kpi', emonth: null};
+
+// ---------- tiny DOM helper (textContent only, never innerHTML for data) ----------
+function h(tag, attrs, ...kids) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else if (k === 'value') el.value = v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : String(c));
+  return el;
+}
+const svgNS = 'http://www.w3.org/2000/svg';
+function s(tag, attrs, text) { const el = document.createElementNS(svgNS, tag); for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v); if (text != null) el.textContent = text; return el; }
+const lvl = (v) => v == null ? 'l0' : v >= 4 ? 'l4' : v >= 3 ? 'l3' : v >= 2 ? 'l2' : 'l1';
+const can = (...roles) => S.me && roles.includes(S.me.role);
+const fmtM = (v) => (v / 1e6).toFixed(2) + ' ลบ.';
+function errText(e) { return (e && (e.message || e.error_description)) || String(e); }
+
+// ---------- auth ----------
+async function boot() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return renderLogin();
+  S.uid = session.user.id;
+  const { data: me, error } = await sb.rpc('whoami');
+  if (error) return renderLogin('เชื่อมต่อไม่สำเร็จ: ' + errText(error));
+  if (!me || !me.role) return renderNoAccess(session.user.email);
+  S.me = me;
+  await loadAll();
+  render();
+}
+sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_IN' && !S.me) boot(); if (ev === 'SIGNED_OUT') { S.me = null; renderLogin(); } });
+
+function renderLogin(msg) {
+  const email = h('input', {type: 'email', placeholder: 'อีเมลบริษัท เช่น name@foodlenoodle.com', autocomplete: 'email'});
+  const out = h('p', {class: 'msg'}, msg || '');
+  const btn = h('button', {class: 'btn', onclick: async () => {
+    const v = email.value.trim(); if (!v) return;
+    btn.disabled = true; out.className = 'msg'; out.textContent = 'กำลังส่งลิงก์…';
+    const { error } = await sb.auth.signInWithOtp({ email: v, options: { emailRedirectTo: location.origin + location.pathname } });
+    btn.disabled = false;
+    if (error) { out.className = 'msg err'; out.textContent = 'ส่งไม่สำเร็จ: ' + errText(error); }
+    else { out.className = 'msg ok'; out.textContent = 'ส่งลิงก์เข้าสู่ระบบไปที่อีเมลแล้ว เปิดอีเมลแล้วกดลิงก์เพื่อเข้าใช้งาน'; }
+  }}, 'ส่งลิงก์เข้าสู่ระบบ');
+  root().replaceChildren(h('div', {class: 'login'},
+    h('img', {src: 'foodle-logo.png', alt: 'Foodle Noodle'}),
+    h('h2', {}, 'KPI & Empathy App 2026'),
+    h('p', {class: 'desc'}, 'เข้าสู่ระบบด้วยอีเมลที่ผู้ดูแลระบบเพิ่มไว้ ระบบจะส่งลิงก์เข้าใช้งานไปที่อีเมล ไม่ต้องใช้รหัสผ่าน'),
+    email, btn, out));
+}
+function renderNoAccess(email) {
+  root().replaceChildren(h('div', {class: 'login'},
+    h('img', {src: 'foodle-logo.png', alt: 'Foodle Noodle'}),
+    h('h2', {}, 'ยังไม่มีสิทธิ์เข้าใช้งาน'),
+    h('p', {}, 'อีเมล ', h('b', {}, email), ' ยังไม่อยู่ในรายชื่อผู้ใช้ กรุณาแจ้งผู้ดูแลระบบให้เพิ่มสิทธิ์'),
+    h('button', {class: 'btn2', onclick: () => sb.auth.signOut()}, 'ออกจากระบบ')));
+}
+const root = () => document.getElementById('root');
+
+// ---------- data ----------
+async function loadAll() {
+  const q = await Promise.all([
+    sb.from('kpi_master').select('*').order('sort'),
+    sb.from('kpi_scores').select('*').eq('year', YEAR),
+    sb.from('sales_monthly').select('*').eq('year', YEAR).order('month_no'),
+    sb.from('help_log').select('*').order('date', {ascending: false}).limit(2000),
+    sb.from('kpi_audit').select('*').order('at', {ascending: false}).limit(30),
+    can('admin') ? sb.from('app_users').select('*').order('email') : Promise.resolve({data: []})
+  ]);
+  const bad = q.find((r) => r.error); if (bad) throw bad.error;
+  [S.master, S.scores, S.sales, S.help, S.audit, S.users] = q.map((r) => r.data || []);
+}
+const approved = () => S.scores.filter((r) => r.state === 'อนุมัติ');
+const scored = (rows) => rows.filter((r) => r.status === 'ได้คะแนน' && r.score != null);
+const masterOf = (id) => S.master.find((m) => m.kpi_id === id) || {};
+const avg = (rows) => rows.length ? rows.reduce((a, r) => a + +r.score, 0) / rows.length : null;
+const r2 = (v) => v == null ? null : Math.round(v * 100) / 100;
+
+function summary() {
+  const ap = approved().map((r) => ({...r, dept: masterOf(r.kpi_id).dept, kpi: masterOf(r.kpi_id).kpi}));
+  const sc = scored(ap);
+  const lm = sc.length ? Math.max(...sc.map((r) => r.month_no)) : null;
+  const cur = sc.filter((r) => r.month_no === lm), prev = sc.filter((r) => r.month_no === lm - 1);
+  const byDept = d3group(cur, (r) => r.dept);
+  const ds = [...byDept].map(([d, rows]) => ({d, a: avg(rows)})).sort((a, b) => b.a - a.a);
+  const ytd = S.sales.filter((r) => r.actual_baht != null).reduce((a, r) => a + +r.actual_baht, 0);
+  const salesLast = Math.max(0, ...S.sales.filter((r) => r.actual_baht != null).map((r) => r.month_no));
+  const depts = [...new Set(S.master.map((m) => m.dept))];
+  return {ap, lm, c: r2(avg(cur)), p: r2(avg(prev)), reported: byDept.size, deptsTotal: depts.length,
+    top: ds[0] && ds[0].d, low: ds.length ? ds[ds.length - 1].d : null,
+    below: cur.filter((r) => r.score < 3).length,
+    missing: lm ? S.master.length - ap.filter((r) => r.month_no === lm && r.status !== 'ไม่มีรายงาน' && r.status !== 'รอข้อมูล').length : 0,
+    ytd, salesLast, ytdPct: Math.round(ytd / 45000000 * 1000) / 10};
+}
+function d3group(arr, f) { const m = new Map(); for (const x of arr) { const k = f(x); if (!m.has(k)) m.set(k, []); m.get(k).push(x); } return m; }
+
+// ---------- layout ----------
+function render() {
+  const sm = summary();
+  const pendKpi = S.scores.filter((r) => r.state === 'รอ HR ตรวจ').length;
+  const pendHelp = S.help.filter((r) => r.status === 'รอยืนยัน').length;
+  const tabs = [['kpi', 'Dashboard KPI', 0], ['entry', 'กรอก KPI / HR อนุมัติ', pendKpi], ['help', 'บันทึกช่วยเพื่อน / Empathy', pendHelp]];
+  if (can('admin')) tabs.push(['users', 'ผู้ใช้งาน', 0]);
+  const chg = sm.c != null && sm.p != null ? r2(sm.c - sm.p) : null;
+  const chgTxt = chg == null ? '—' : (chg > 0 ? '+' : '') + chg.toFixed(2);
+  const chgCls = chg > 0 ? 'good' : chg < 0 ? 'badc' : '';
+  const lmName = sm.lm ? MONTHS[sm.lm - 1] + ' ' + YEAR : '—';
+  root().replaceChildren(
+    h('header', {class: 'hero'},
+      h('div', {class: 'brand'}, h('img', {src: 'foodle-logo.png', alt: 'Foodle Noodle'}), h('span', {class: 'chip'}, 'KPI · EMPATHY · 2026'),
+        h('div', {class: 'userbox'}, S.me.name + ' · ' + ROLES[S.me.role], h('button', {class: 'btn2', onclick: refresh}, 'รีเฟรช'), h('button', {class: 'btn2', onclick: () => sb.auth.signOut()}, 'ออกจากระบบ'))),
+      h('h1', {}, 'KPI & Empathy App 2026 — Foodle Noodle'),
+      h('p', {class: 'sub'}, 'คะแนน KPI รายแผนก (เต็ม 5) · ข้อมูลจริงจากฐานข้อมูลบริษัท อัปเดตทันทีที่ HR อนุมัติ'),
+      h('p', {class: 'take'}, 'เดือน ', h('b', {}, lmName), ' คะแนนเฉลี่ยทั้งบริษัท ', h('b', {}, sm.c != null ? sm.c.toFixed(2) : '—'), ' จาก 5 (',
+        h('span', {class: chgCls}, chgTxt), ' จากเดือนก่อน) จาก ', h('b', {}, sm.reported + '/' + sm.deptsTotal), ' แผนกที่มีคะแนน · สูงสุด ', h('b', {}, sm.top || '—'),
+        ' · ต่ำสุด ', h('b', {}, sm.low || '—'), ' · ยอดขายสะสม ', h('b', {}, sm.ytdPct.toFixed(1) + '%'), ' ของเป้าทั้งปี 45 ล้านบาท'),
+      mascot()),
+    h('nav', {class: 'tabs', role: 'tablist'}, tabs.map(([id, label, n]) => h('button', {class: 'tab', role: 'tab', 'aria-selected': String(S.tab === id), onclick: () => { S.tab = id; render(); history.replaceState(null, '', '#' + id); }}, label, n ? h('span', {class: 'badge'}, n) : null))),
+    S.tab === 'kpi' ? panelKpi(sm) : S.tab === 'entry' ? panelEntry() : S.tab === 'help' ? panelHelp() : panelUsers(),
+    h('details', {}, h('summary', {}, 'วิธีคิดคะแนน'), h('ul', {class: 'rules'},
+      h('li', {}, 'แต่ละ KPI ได้ 0–5 คะแนนตามระดับค่าเป้าหมาย (3 = ค่ามาตรฐาน)'),
+      h('li', {}, 'คะแนนแผนก = ค่าเฉลี่ย KPI สถานะ "ได้คะแนน" ที่ HR อนุมัติแล้ว ไม่นับ N/A / ไม่มีรายงาน / รอข้อมูล'),
+      h('li', {}, 'ข้อมูล ม.ค.–ต.ค. 2026 นำเข้าจากไฟล์คะแนน KPI 2026 และรายงาน PPTX ประจำเดือน'),
+      h('li', {}, 'ระดับ: ≥4 ดีมาก · 3–3.99 ได้ตามเป้า · 2–2.99 ต้องติดตาม · <2 ต้องปรับปรุง'))));
+}
+async function refresh() { try { await loadAll(); render(); } catch (e) { alertBox(errText(e)); } }
+function alertBox(t) { const p = h('p', {class: 'msg err'}, t); root().prepend(p); setTimeout(() => p.remove(), 6000); }
+
+function mascot() {
+  const w = h('div', {class: 'mascot'});
+  w.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 200 190" role="img" aria-label="น้องฟู้ดเดิ้ล มาสคอตชามก๋วยเตี๋ยว"><g class="steam" fill="none" stroke="#A9C98F" stroke-width="5" stroke-linecap="round"><path d="M70 40 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M100 34 q-8 -10 0 -20 q8 -10 0 -20"/><path d="M130 40 q-8 -10 0 -20 q8 -10 0 -20"/></g><g stroke="#7A4E2D" stroke-width="7" stroke-linecap="round"><line x1="128" y1="70" x2="182" y2="22"/><line x1="138" y1="76" x2="192" y2="34"/></g><path d="M34 84 q8 -26 30 -16 q14 -20 36 -8 q20 -14 36 4 q22 -6 30 20 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="3"/><circle cx="72" cy="72" r="7" fill="#92D050"/><circle cx="128" cy="70" r="6" fill="#F28B82"/><path d="M26 84 h148 q-4 60 -74 72 q-70 -12 -74 -72 z" fill="#3C672E"/><rect x="78" y="154" width="44" height="12" rx="6" fill="#2C4F22"/><ellipse cx="74" cy="112" rx="7" ry="9" fill="#fff"/><ellipse cx="126" cy="112" rx="7" ry="9" fill="#fff"/><circle cx="75" cy="114" r="4.5" fill="#1F2A1B"/><circle cx="127" cy="114" r="4.5" fill="#1F2A1B"/><ellipse cx="60" cy="126" rx="9" ry="5" fill="#F7A1A1"/><ellipse cx="140" cy="126" rx="9" ry="5" fill="#F7A1A1"/><path d="M90 124 q10 12 20 0" fill="#C8464A" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round"/><path d="M28 104 q-18 -6 -16 -26" stroke="#3C672E" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="12" cy="76" r="8" fill="#3C672E"/><path d="M172 104 q14 8 10 22" stroke="#3C672E" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="182" cy="128" r="8" fill="#3C672E"/></svg>');
+  w.append(h('span', {}, 'น้องฟู้ดเดิ้ล'));
+  return w;
+}
+
+// ---------- Dashboard ----------
+function panelKpi(sm) {
+  const lmName = sm.lm ? 'เดือน ' + MONTHS[sm.lm - 1] + ' ' + YEAR : '—';
+  const chg = sm.c != null && sm.p != null ? r2(sm.c - sm.p) : null;
+  const ap = sm.ap;
+  const depts = [...new Set(S.master.map((m) => m.dept))];
+  const months = [...new Set(ap.map((r) => r.month_no))].sort((a, b) => a - b);
+  // heatmap
+  const heat = h('table', {class: 'heat'}, h('thead', {}, h('tr', {}, h('th', {}, 'แผนก'), months.map((m) => h('th', {class: 'c'}, MONTHS[m - 1])))),
+    h('tbody', {}, depts.map((d) => h('tr', {}, h('td', {style: 'white-space:nowrap'}, d), months.map((m) => {
+      const a = r2(avg(scored(ap.filter((r) => r.dept === d && r.month_no === m))));
+      return h('td', {class: 'c ' + lvl(a), title: d + ' ' + MONTHS[m - 1]}, a == null ? '–' : a.toFixed(2));
+    })))));
+  // detail
+  const fm = h('select', {}, h('option', {value: ''}, 'เดือนล่าสุดที่มีคะแนน'), MONTHS.map((n, i) => h('option', {value: i + 1}, n + ' ' + YEAR)));
+  const fd = h('select', {}, h('option', {value: ''}, 'ทุกแผนก'), depts.map((d) => h('option', {}, d)));
+  const tbody = h('tbody');
+  const drawDetail = () => {
+    const m = +fm.value || sm.lm, d = fd.value;
+    const rows = S.master.filter((k) => !d || k.dept === d).map((k) => ({k, r: S.scores.find((x) => x.kpi_id === k.kpi_id && x.month_no === m)}));
+    tbody.replaceChildren(...(rows.length ? rows.map(({k, r}) => {
+      const ok = r && r.state === 'อนุมัติ';
+      const sc = ok && r.status === 'ได้คะแนน' ? +r.score : null;
+      return h('tr', {}, h('td', {}, k.dept), h('td', {}, k.kpi), h('td', {}, k.target || ''), h('td', {class: lvl(sc)}, sc == null ? '–' : sc),
+        h('td', {}, r ? (ok ? r.status : r.state) : 'ไม่มีข้อมูล'), h('td', {}, r ? [r.note, r.source === 'app' ? `กรอกโดย ${r.submitted_name || '-'}${r.reviewed_name ? ' · อนุมัติโดย ' + r.reviewed_name : ''}` : ''].filter(Boolean).join(' · ') : ''));
+    }) : [h('tr', {}, h('td', {colspan: 6, class: 'empty'}, 'ไม่มีข้อมูล'))]));
+  };
+  fm.onchange = fd.onchange = drawDetail; drawDetail();
+  // below / missing
+  const cur = ap.filter((r) => r.month_no === sm.lm);
+  const below = scored(cur).filter((r) => r.score < 3).sort((a, b) => a.score - b.score).map((r) => {
+    const hist = scored(ap.filter((x) => x.kpi_id === r.kpi_id)).sort((a, b) => b.month_no - a.month_no);
+    let st = 0; for (const x of hist) { if (x.score < 3) st++; else break; }
+    return {...r, streak: st};
+  });
+  const missing = S.master.map((k) => ({k, r: S.scores.find((x) => x.kpi_id === k.kpi_id && x.month_no === sm.lm)}))
+    .filter(({r}) => !r || r.state !== 'อนุมัติ' || r.status === 'ไม่มีรายงาน' || r.status === 'รอข้อมูล');
+  // company trend
+  const trend = months.map((m) => ({m, a: r2(avg(scored(ap.filter((r) => r.month_no === m)))), n: scored(ap.filter((r) => r.month_no === m)).length}));
+  return h('section', {class: 'panel'},
+    h('div', {class: 'tiles'},
+      h('div', {class: 'card'}, h('h3', {}, 'คะแนนเฉลี่ยทั้งบริษัท'), h('div', {class: 'win'}, lmName), h('div', {class: 'big'}, sm.c != null ? sm.c.toFixed(2) + ' / 5' : '—'),
+        h('div', {class: 'note'}, h('span', {class: chg > 0 ? 'good' : chg < 0 ? 'badc' : ''}, chg == null ? '—' : (chg > 0 ? '+' : '') + chg.toFixed(2)), sm.p != null ? ` จากเดือนก่อน (${sm.p.toFixed(2)}) · มีคะแนน ${sm.reported}/${sm.deptsTotal} แผนก` : '')),
+      h('div', {class: 'card'}, h('h3', {}, 'ยอดขายสะสม (YTD)'), h('div', {class: 'win'}, sm.salesLast ? 'ม.ค.–' + MONTHS[sm.salesLast - 1] + ' ' + YEAR : '—'), h('div', {class: 'big'}, fmtM(sm.ytd)), h('div', {class: 'note'}, sm.ytdPct.toFixed(1) + '% ของเป้า 45 ล้านบาท/ปี')),
+      h('div', {class: 'card'}, h('h3', {}, 'KPI ต่ำกว่าเกณฑ์มาตรฐาน'), h('div', {class: 'win'}, lmName), h('div', {class: 'big'}, String(sm.below)), h('div', {class: 'note'}, 'ตัวที่ได้ต่ำกว่า 3 คะแนน')),
+      h('div', {class: 'card'}, h('h3', {}, 'KPI ที่ยังไม่มีข้อมูล'), h('div', {class: 'win'}, lmName), h('div', {class: 'big'}, String(missing.length)), h('div', {class: 'note'}, 'ไม่มีรายงาน / รอข้อมูล / ยังไม่อนุมัติ'))),
+    h('div', {class: 'sec'}, h('h2', {}, 'คะแนนรายแผนก รายเดือน'), h('p', {class: 'desc'}, 'ค่าเฉลี่ย KPI ที่ได้คะแนนและอนุมัติแล้ว · "–" = ไม่มี KPI ที่ได้คะแนน · ฝ่ายบัญชียังไม่มี KPI'),
+      h('div', {class: 'legend'}, h('span', {}, h('i', {class: 'l4'}), '≥ 4.0 ดีมาก'), h('span', {}, h('i', {class: 'l3'}), '3.0–3.99 ได้ตามเป้า'), h('span', {}, h('i', {class: 'l2'}), '2.0–2.99 ต้องติดตาม'), h('span', {}, h('i', {class: 'l1'}), '< 2.0 ต้องปรับปรุง')),
+      h('div', {class: 'scroll'}, heat)),
+    h('div', {class: 'sec'}, h('h2', {}, 'รายละเอียด KPI รายตัว'), h('div', {class: 'bar'}, h('label', {}, 'เดือน', fm), h('label', {}, 'แผนก', fd)),
+      h('div', {class: 'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, ['แผนก', 'ตัวชี้วัด', 'เป้าหมาย', 'คะแนน', 'สถานะ', 'ที่มา / หมายเหตุ'].map((t) => h('th', {}, t)))), tbody))),
+    h('div', {class: 'two'},
+      h('div', {class: 'sec'}, h('h2', {}, 'แนวโน้มคะแนนเฉลี่ยทั้งบริษัท'), h('p', {class: 'desc'}, 'เดือนที่บางแผนกไม่ส่งรายงานอาจสูงกว่าความจริง'), lineChart(trend)),
+      h('div', {class: 'sec'}, h('h2', {}, 'ยอดขายรายเดือนเทียบเป้า 3.75 ล้านบาท'), h('p', {class: 'desc'}, 'เส้นประ = เป้ารายเดือน'), barChart(S.sales))),
+    h('div', {class: 'sec'}, h('h2', {}, 'KPI ที่ต่ำกว่าเกณฑ์ เดือนล่าสุด'), h('p', {class: 'desc'}, 'หัวข้อที่ควรคุยในประชุมประจำเดือน'),
+      tableOf(['แผนก', 'ตัวชี้วัด', 'คะแนน', 'ต่ำกว่าเกณฑ์ติดกัน (เดือน)', 'หมายเหตุ'], below.map((r) => [r.dept, r.kpi, {t: r.score, c: lvl(+r.score)}, r.streak, r.note || '']), 'ไม่มี KPI ต่ำกว่าเกณฑ์')),
+    h('div', {class: 'sec'}, h('h2', {}, 'ข้อมูลที่ยังขาด เดือนล่าสุด'), h('p', {class: 'desc'}, 'ต้องตามให้ส่งก่อนประชุม'),
+      tableOf(['แผนก', 'ตัวชี้วัด', 'สถานะ', 'หมายเหตุ'], missing.map(({k, r}) => [k.dept, k.kpi, r ? (r.state === 'อนุมัติ' ? r.status : r.state) : 'ไม่มีข้อมูล', r ? r.note || '' : '']), 'ข้อมูลครบทุกตัว')));
+}
+function tableOf(heads, rows, empty) {
+  return h('div', {class: 'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, heads.map((t) => h('th', {}, t)))),
+    h('tbody', {}, rows.length ? rows.map((r) => h('tr', {}, r.map((c) => c && typeof c === 'object' && !(c instanceof Node) ? h('td', {class: c.c || ''}, c.t) : h('td', {}, c)))) : h('tr', {}, h('td', {colspan: heads.length, class: 'empty'}, empty)))));
+}
+function withTip(box) { const t = h('div', {class: 'tip', hidden: true}); box.append(t); return (lines, x, y) => { if (!lines) { t.hidden = true; return; } t.replaceChildren(...lines.map((l, i) => h(i ? 'div' : 'strong', {}, l))); t.hidden = false; t.style.left = Math.max(0, Math.min(box.clientWidth - t.offsetWidth, x - t.offsetWidth / 2)) + 'px'; t.style.top = Math.max(0, y - t.offsetHeight - 8) + 'px'; }; }
+function lineChart(data) {
+  const box = h('div', {class: 'chart'}); const W = 560, H = 260, L = 32, R = 16, T = 24, B = 28;
+  const svg = s('svg', {viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'กราฟคะแนนเฉลี่ยรายเดือน'});
+  const x = (i) => L + (W - L - R) * (data.length > 1 ? i / (data.length - 1) : .5), y = (v) => T + (H - T - B) * (1 - v / 5);
+  for (let v = 0; v <= 5; v++) { svg.append(s('line', {x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: v === 3 ? '#C9B7A0' : '#EEF2EE', 'stroke-dasharray': v === 3 ? '4 3' : ''})); svg.append(s('text', {x: L - 8, y: y(v) + 4, 'text-anchor': 'end'}, v)); }
+  svg.append(s('text', {x: W - R, y: y(3) - 4, 'text-anchor': 'end'}, 'ค่ามาตรฐาน 3'));
+  const pts = data.map((d, i) => d.a == null ? null : [x(i), y(d.a)]).filter(Boolean);
+  if (pts.length) svg.append(s('polyline', {points: pts.map((p) => p.join(',')).join(' '), fill: 'none', stroke: 'var(--chart)', 'stroke-width': 2}));
+  const tip = withTip(box);
+  data.forEach((d, i) => {
+    svg.append(s('text', {x: x(i), y: H - 8, 'text-anchor': 'middle'}, MONTHS[d.m - 1]));
+    if (d.a == null) return;
+    svg.append(s('circle', {cx: x(i), cy: y(d.a), r: 4, fill: 'var(--chart)'}));
+    svg.append(s('text', {x: x(i), y: y(d.a) - 9, 'text-anchor': 'middle'}, d.a.toFixed(1)));
+    const hit = s('rect', {x: x(i) - 20, y: T, width: 40, height: H - T - B, fill: 'transparent'});
+    hit.addEventListener('pointerenter', () => { const k = box.clientWidth / W; tip([MONTHS[d.m - 1] + ' ' + YEAR, 'คะแนนเฉลี่ย ' + d.a.toFixed(2), 'จาก ' + d.n + ' KPI'], x(i) * k, y(d.a) * k); });
+    hit.addEventListener('pointerleave', () => tip(null));
+    svg.append(hit);
+  });
+  box.prepend(svg); return box;
+}
+function barChart(rows) {
+  const box = h('div', {class: 'chart'}); const W = 560, H = 260, L = 40, R = 16, T = 24, B = 28;
+  const data = MONTHS.slice(0, Math.max(10, ...rows.map((r) => r.month_no))).map((n, i) => { const r = rows.find((x) => x.month_no === i + 1); return {n, a: r && r.actual_baht != null ? +r.actual_baht : null, t: r ? +r.target_baht : 3750000}; });
+  const max = Math.max(4e6, ...data.map((d) => (d.a || 0) * 1.1));
+  const svg = s('svg', {viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': 'กราฟยอดขายรายเดือน'});
+  const bw = (W - L - R) / data.length, y = (v) => T + (H - T - B) * (1 - v / max);
+  for (const v of [0, 1e6, 2e6, 3e6, 4e6].filter((v) => v <= max)) { svg.append(s('line', {x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: '#EEF2EE'})); svg.append(s('text', {x: L - 6, y: y(v) + 4, 'text-anchor': 'end'}, v / 1e6 + 'M')); }
+  const tip = withTip(box);
+  data.forEach((d, i) => {
+    const cx = L + bw * i + bw / 2;
+    svg.append(s('text', {x: cx, y: H - 8, 'text-anchor': 'middle'}, d.n));
+    if (d.a != null) {
+      svg.append(s('rect', {x: cx - bw * .35, width: bw * .7, y: y(d.a), height: y(0) - y(d.a), rx: 2, fill: 'var(--chart)', opacity: d.a >= d.t ? 1 : .75}));
+      svg.append(s('text', {x: cx, y: y(d.a) - 4, 'text-anchor': 'middle'}, (d.a / 1e6).toFixed(1)));
+    }
+    const hit = s('rect', {x: cx - bw / 2, y: T, width: bw, height: H - T - B, fill: 'transparent'});
+    hit.addEventListener('pointerenter', () => { const k = box.clientWidth / W; tip([d.n + ' ' + YEAR, d.a == null ? 'ยังไม่มีข้อมูล' : 'ยอดขาย ' + d.a.toLocaleString('th-TH') + ' บาท', d.a == null ? '' : Math.round(d.a / d.t * 100) + '% ของเป้า'], cx * k, y(d.a || 0) * k); });
+    hit.addEventListener('pointerleave', () => tip(null));
+    svg.append(hit);
+  });
+  svg.append(s('line', {x1: L, x2: W - R, y1: y(3750000), y2: y(3750000), stroke: '#C0453F', 'stroke-dasharray': '5 4', 'stroke-width': 1.5}));
+  svg.append(s('text', {x: W - R, y: y(3750000) - 5, 'text-anchor': 'end'}, 'เป้า 3.75M'));
+  box.prepend(svg); return box;
+}
+
+// ---------- KPI entry + HR approval ----------
+function panelEntry() {
+  const canEdit = can('editor', 'hr', 'admin'), canReview = can('hr', 'admin');
+  const depts = [...new Set(S.master.map((m) => m.dept))];
+  const now = new Date();
+  const em = h('select', {}, MONTHS.map((n, i) => h('option', {value: i + 1}, n + ' ' + YEAR)));
+  em.value = String(S.entryMonth || (now.getMonth() === 0 ? 12 : now.getMonth()));
+  const ed = h('select', {}, depts.map((d) => h('option', {}, d)));
+  if (S.entryDept) ed.value = S.entryDept;
+  const tbody = h('tbody');
+  const out = h('span', {class: 'msg'});
+  const draw = () => {
+    S.entryMonth = +em.value; S.entryDept = ed.value;
+    const m = +em.value;
+    tbody.replaceChildren(...S.master.filter((k) => k.dept === ed.value).map((k) => {
+      const r = S.scores.find((x) => x.kpi_id === k.kpi_id && x.month_no === m);
+      const sIn = h('input', {type: 'number', min: 0, max: 5, step: 0.5, style: 'width:78px', value: r && r.score != null ? +r.score : '', disabled: !canEdit, 'aria-label': 'คะแนน'});
+      const sel = h('select', {disabled: !canEdit}, STATUSES.map((t) => h('option', {}, t))); sel.value = r ? r.status : 'ไม่มีรายงาน';
+      sIn.oninput = () => { if (sIn.value !== '') sel.value = 'ได้คะแนน'; };
+      const nIn = h('input', {placeholder: 'เช่น ผลจริง 96%', value: r && r.note || '', disabled: !canEdit, style: 'min-width:180px;width:100%'});
+      const st = r ? (r.state === 'ส่งกลับ' ? 'ส่งกลับ' + (r.review_note ? ': ' + r.review_note : '') : r.state + (r.source === 'file' ? ' (จากไฟล์)' : '')) : 'ยังไม่ส่ง';
+      const tr = h('tr', {}, h('td', {}, k.kpi), h('td', {}, k.target || ''), h('td', {}, sIn), h('td', {}, sel), h('td', {}, nIn), h('td', {class: r ? ({'รอ HR ตรวจ': 'st-wait', 'อนุมัติ': 'st-yes', 'ส่งกลับ': 'st-no'})[r.state] : ''}, st));
+      tr._get = () => ({kpi_id: k.kpi_id, score: sIn.value, status: sel.value, note: nIn.value.trim()});
+      return tr;
+    }));
+  };
+  em.onchange = ed.onchange = draw; draw();
+  const submit = h('button', {class: 'btn', disabled: !canEdit, onclick: async () => {
+    const items = [...tbody.children].map((tr) => tr._get());
+    const bad = items.find((i) => i.status === 'ได้คะแนน' && (i.score === '' || +i.score < 0 || +i.score > 5));
+    if (bad) { out.className = 'msg err'; out.textContent = 'KPI ที่สถานะ "ได้คะแนน" ต้องมีคะแนน 0–5'; return; }
+    submit.disabled = true; out.className = 'msg'; out.textContent = 'กำลังส่ง…';
+    const { error } = await sb.rpc('submit_kpi', {p_year: YEAR, p_month: +em.value, p_items: items});
+    submit.disabled = false;
+    if (error) { out.className = 'msg err'; out.textContent = 'ส่งไม่สำเร็จ: ' + errText(error); return; }
+    await loadAll(); render();
+  }}, 'ส่งให้ HR ตรวจ');
+  // review
+  const pend = S.scores.filter((r) => r.state === 'รอ HR ตรวจ').sort((a, b) => a.month_no - b.month_no || a.kpi_id.localeCompare(b.kpi_id));
+  const rNote = h('input', {placeholder: 'เหตุผล (ถ้าส่งกลับ)', style: 'min-width:240px'});
+  const rOut = h('p', {class: 'msg err'});
+  const review = async (r, state) => {
+    const { error } = await sb.rpc('review_kpi', {p_id: r.id, p_state: state, p_note: state === 'ส่งกลับ' ? rNote.value.trim() : null});
+    if (error) { rOut.textContent = errText(error); return false; }
+    return true;
+  };
+  const myId = S.uid;
+  const reviewRows = pend.map((r) => {
+    const own = r.submitted_by === myId;
+    const k = masterOf(r.kpi_id);
+    const btn = (label, st) => h('button', {class: 'btn2', disabled: !canReview || own, title: own ? 'ผู้ส่งอนุมัติรายการของตัวเองไม่ได้' : '', onclick: async (e) => { e.target.disabled = true; if (await review(r, st)) { await loadAll(); render(); } else e.target.disabled = false; }}, label);
+    return h('tr', {}, h('td', {}, MONTHS[r.month_no - 1]), h('td', {}, k.dept), h('td', {}, k.kpi), h('td', {class: lvl(r.score == null ? null : +r.score)}, r.score == null ? '–' : +r.score), h('td', {}, r.status), h('td', {}, r.note || ''), h('td', {}, r.submitted_name || ''), h('td', {style: 'white-space:nowrap'}, btn('อนุมัติ', 'อนุมัติ'), btn('ส่งกลับ', 'ส่งกลับ')));
+  });
+  const approveAll = h('button', {class: 'btn2', disabled: !canReview || !pend.length, onclick: async () => {
+    approveAll.disabled = true;
+    for (const r of pend.filter((x) => x.submitted_by !== myId)) { if (!(await review(r, 'อนุมัติ'))) break; }
+    await loadAll(); render();
+  }}, 'อนุมัติทั้งหมดที่ไม่ใช่ของฉัน');
+  return h('section', {class: 'panel'},
+    h('div', {class: 'sec'}, h('h2', {}, 'กรอกคะแนน KPI รายเดือน'),
+      h('p', {class: 'desc'}, 'หัวหน้าแผนกกรอกคะแนน 0–5 แล้วกด "ส่งให้ HR ตรวจ" · คะแนนขึ้น Dashboard เมื่อ HR อนุมัติ · ส่งซ้ำได้ (รายการที่อนุมัติแล้วจะกลับไปรอตรวจใหม่)'),
+      canEdit ? null : h('p', {class: 'notice'}, 'บัญชีของคุณดูได้อย่างเดียว ถ้าต้องกรอกคะแนน ให้ผู้ดูแลระบบเปลี่ยนสิทธิ์เป็นหัวหน้าแผนก'),
+      h('div', {class: 'bar'}, h('label', {}, 'เดือน', em), h('label', {}, 'แผนก', ed)),
+      h('div', {class: 'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, ['ตัวชี้วัด', 'เป้าหมาย', 'คะแนน (0–5)', 'สถานะ', 'ผลจริง / หมายเหตุ', 'สถานะการตรวจ'].map((t) => h('th', {}, t)))), tbody)),
+      h('div', {class: 'actions'}, submit, out)),
+    h('div', {class: 'sec'}, h('h2', {}, `HR ตรวจและอนุมัติ · รอตรวจ ${pend.length} รายการ`),
+      h('p', {class: 'desc'}, 'ตรวจคะแนนเทียบหลักฐานในหมายเหตุ · ผู้ส่งอนุมัติรายการของตัวเองไม่ได้ (ระบบบล็อกที่ฐานข้อมูล)'),
+      canReview ? h('div', {class: 'bar'}, rNote, approveAll) : h('p', {class: 'notice'}, 'เฉพาะ HR และผู้ดูแลระบบที่อนุมัติได้'), rOut,
+      h('div', {class: 'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, ['เดือน', 'แผนก', 'ตัวชี้วัด', 'คะแนน', 'สถานะ', 'หมายเหตุ', 'ส่งโดย', 'ดำเนินการ'].map((t) => h('th', {}, t)))),
+        h('tbody', {}, reviewRows.length ? reviewRows : h('tr', {}, h('td', {colspan: 8, class: 'empty'}, 'ไม่มีรายการรอตรวจ')))))),
+    h('div', {class: 'sec'}, h('h2', {}, 'ประวัติการแก้ไขและอนุมัติ (30 รายการล่าสุด)'),
+      tableOf(['เวลา', 'การดำเนินการ', 'เดือน', 'KPI', 'คะแนน', 'โดย', 'หมายเหตุ'], S.audit.map((a) => [new Date(a.at).toLocaleString('th-TH', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'}), a.action, a.month_no ? MONTHS[a.month_no - 1] : '', (masterOf(a.kpi_id).kpi || a.kpi_id || ''), a.score == null ? '–' : +a.score, a.by_name || '', a.note || '']), 'ยังไม่มีประวัติ')));
+}
+
+// ---------- Help log / Empathy ----------
+function empathyRows() {
+  const pts = Object.fromEntries(HELP_TYPES);
+  const rows = S.help.filter((r) => r.status === 'ยืนยัน').sort((a, b) => a.date.localeCompare(b.date) || a.recorded_at.localeCompare(b.recorded_at));
+  const pair = new Map(), people = new Map();
+  for (const r of rows) {
+    const m = r.date.slice(0, 7), pk = m + '|' + r.helper + '>' + r.receiver;
+    if (r.helper === r.receiver) continue;
+    pair.set(pk, (pair.get(pk) || 0) + 1); if (pair.get(pk) > 2) continue;
+    const k = r.helper + '|' + m;
+    if (!people.has(k)) people.set(k, {person: r.helper, dept: r.helper_dept || '', month: m, count: 0, points: 0});
+    const p = people.get(k); p.count++; p.points += pts[r.help_type] || 0;
+  }
+  return [...people.values()].map((p) => ({...p, bonus: Math.min(p.points, 5)})).sort((a, b) => b.month.localeCompare(a.month) || b.points - a.points);
+}
+function panelHelp() {
+  const canEdit = can('editor', 'hr', 'admin');
+  const opt = (list) => list.map((x) => h('option', {}, x));
+  const today = new Date(); const pad = (n) => String(n).padStart(2, '0');
+  const f = {
+    date: h('input', {type: 'date', value: `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`}),
+    type: h('select', {}, HELP_TYPES.map(([t, p]) => h('option', {value: t}, `${t} (${p} คะแนน)`))),
+    helper: h('input', {list: 'names', maxlength: 60, placeholder: 'ชื่อ-ชื่อเล่น'}), hdept: h('select', {}, opt(HELP_DEPTS)),
+    receiver: h('input', {list: 'names', maxlength: 60, placeholder: 'ชื่อ-ชื่อเล่น'}), rdept: h('select', {}, opt(HELP_DEPTS)),
+    detail: h('textarea', {maxlength: 300, placeholder: 'เช่น ช่วยนับสต็อกบรรจุภัณฑ์ก่อนตรวจรับ'})
+  };
+  const names = [...new Set(S.help.flatMap((r) => [r.helper, r.receiver]))].sort((a, b) => a.localeCompare(b, 'th'));
+  const out = h('span', {class: 'msg'});
+  const save = h('button', {class: 'btn', disabled: !canEdit, onclick: async () => {
+    if (!f.helper.value.trim() || !f.receiver.value.trim() || !f.detail.value.trim()) { out.className = 'msg err'; out.textContent = 'กรอกให้ครบทุกช่อง'; return; }
+    save.disabled = true;
+    const { error } = await sb.rpc('add_help', {p_date: f.date.value, p_helper: f.helper.value, p_helper_dept: f.hdept.value, p_receiver: f.receiver.value, p_receiver_dept: f.rdept.value, p_type: f.type.value, p_detail: f.detail.value});
+    save.disabled = false;
+    if (error) { out.className = 'msg err'; out.textContent = errText(error); return; }
+    await loadAll(); render();
+  }}, 'บันทึก');
+  const actOut = h('p', {class: 'msg err'});
+  const act = async (fn, args) => { const { error } = await sb.rpc(fn, args); if (error) { actOut.textContent = errText(error); return; } await loadAll(); render(); };
+  const pend = S.help.filter((r) => r.status === 'รอยืนยัน').sort((a, b) => a.date.localeCompare(b.date));
+  const emp = empathyRows();
+  const months = [...new Set(emp.map((e) => e.month))];
+  if (!S.emonth || !months.includes(S.emonth)) S.emonth = months[0] || null;
+  const msel = h('select', {onchange: (e) => { S.emonth = e.target.value; render(); }}, months.length ? months.map((m) => h('option', {value: m}, m)) : h('option', {value: ''}, 'ยังไม่มีข้อมูล'));
+  if (S.emonth) msel.value = S.emonth;
+  const cheer = h('div', {class: 'cheer'});
+  cheer.insertAdjacentHTML('afterbegin', '<svg viewBox="0 0 260 150" role="img" aria-label="ชามก๋วยเตี๋ยวสองใบไฮไฟว์กัน"><path d="M130 30 c-10 -16 -32 -4 -20 12 l20 18 20 -18 c12 -16 -10 -28 -20 -12z" fill="#F28B82"/><g transform="translate(20 50)"><path d="M4 34 q6 -18 24 -12 q12 -14 28 -4 q16 -6 24 16 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="2.5"/><path d="M0 34 h88 q-3 44 -44 52 q-41 -8 -44 -52z" fill="#4A7545"/><circle cx="30" cy="56" r="4" fill="#1F2A1B"/><circle cx="58" cy="56" r="4" fill="#1F2A1B"/><ellipse cx="22" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><ellipse cx="66" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><path d="M38 64 q6 8 12 0" fill="none" stroke="#1F2A1B" stroke-width="2.5" stroke-linecap="round"/><path d="M86 50 q18 -8 22 -26" stroke="#4A7545" stroke-width="8" stroke-linecap="round" fill="none"/></g><g transform="translate(152 50)"><path d="M4 34 q6 -18 24 -12 q12 -14 28 -4 q16 -6 24 16 z" fill="#FFF6D6" stroke="#E9D9A6" stroke-width="2.5"/><path d="M0 34 h88 q-3 44 -44 52 q-41 -8 -44 -52z" fill="#3C672E"/><path d="M24 56 q6 -6 12 0" fill="none" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round"/><path d="M52 56 q6 -6 12 0" fill="none" stroke="#1F2A1B" stroke-width="3" stroke-linecap="round"/><ellipse cx="20" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><ellipse cx="68" cy="66" rx="6" ry="3.5" fill="#F7A1A1"/><path d="M36 63 q8 10 16 0z" fill="#C8464A"/><path d="M2 50 q-18 -8 -22 -26" stroke="#3C672E" stroke-width="8" stroke-linecap="round" fill="none"/></g><circle cx="130" cy="74" r="7" fill="#4A7545"/></svg>');
+  cheer.append(h('p', {}, h('strong', {}, 'ช่วยเพื่อน = ได้ใจ + ได้คะแนน'), 'เห็นเพื่อนช่วยงาน บันทึกไว้เลย หัวหน้ายืนยันแล้วเพื่อนได้โบนัส Empathy สูงสุด +5 ต่อเดือน'));
+  return h('section', {class: 'panel'},
+    cheer,
+    h('div', {class: 'sec'}, h('h2', {}, 'บันทึกการช่วยเพื่อน'),
+      h('p', {class: 'desc'}, 'หัวหน้าบันทึกแทนพนักงานที่ได้รับการช่วย · ผู้บันทึกยืนยันรายการของตัวเองไม่ได้ · ทุกคนในระบบเห็นรายการ — เขียนเฉพาะเรื่องงาน'),
+      canEdit ? null : h('p', {class: 'notice'}, 'บัญชีของคุณดูได้อย่างเดียว'),
+      h('div', {class: 'form'},
+        h('label', {}, 'วันที่ช่วย', f.date), h('label', {}, 'ประเภทการช่วย', f.type),
+        h('label', {}, 'ผู้ช่วย', f.helper), h('label', {}, 'แผนกผู้ช่วย', f.hdept),
+        h('label', {}, 'ผู้ได้รับการช่วย', f.receiver), h('label', {}, 'แผนกผู้ได้รับการช่วย', f.rdept),
+        h('label', {class: 'wide'}, 'ช่วยเรื่องอะไร', f.detail),
+        h('div', {class: 'wide actions'}, save, out)),
+      h('datalist', {id: 'names'}, names.map((n) => h('option', {value: n})))),
+    h('div', {class: 'sec'}, h('h2', {}, `รอยืนยัน ${pend.length} รายการ`), h('p', {class: 'desc'}, 'หัวหน้าของผู้ช่วยตรวจว่าเป็นการช่วยจริง ไม่ใช่งานตาม JD แล้วกดยืนยันภายใน 7 วัน'), actOut,
+      h('div', {class: 'scroll'}, h('table', {}, h('thead', {}, h('tr', {}, ['วันที่', 'ผู้ช่วย', 'ผู้ได้รับการช่วย', 'ประเภท', 'รายละเอียด', 'บันทึกโดย', 'ดำเนินการ'].map((t) => h('th', {}, t)))),
+        h('tbody', {}, pend.length ? pend.map((r) => {
+          const own = r.recorded_by === S.uid;
+          return h('tr', {}, h('td', {}, r.date), h('td', {}, r.helper), h('td', {}, r.receiver), h('td', {}, r.help_type), h('td', {}, r.detail), h('td', {}, r.recorded_name || ''),
+            h('td', {style: 'white-space:nowrap'},
+              h('button', {class: 'btn2', disabled: !canEdit || own, title: own ? 'ผู้บันทึกยืนยันเองไม่ได้' : '', onclick: () => act('confirm_help', {p_id: r.id, p_status: 'ยืนยัน'})}, 'ยืนยัน'),
+              h('button', {class: 'btn2', disabled: !canEdit || own, onclick: () => act('confirm_help', {p_id: r.id, p_status: 'ไม่อนุมัติ'})}, 'ไม่อนุมัติ'),
+              own || can('admin') ? h('button', {class: 'btn2', onclick: () => act('delete_help', {p_id: r.id})}, 'ลบ') : null));
+        }) : h('tr', {}, h('td', {colspan: 7, class: 'empty'}, 'ไม่มีรายการรอยืนยัน')))))),
+    h('div', {class: 'sec'}, h('h2', {}, 'คะแนน Empathy รายคน'), h('div', {class: 'bar'}, h('label', {}, 'เดือน', msel)),
+      h('div', {class: 'two'},
+        tableOf(['พนักงาน', 'แผนก', 'ครั้งที่นับ', 'คะแนน', 'โบนัส'], emp.filter((e) => e.month === S.emonth).map((e) => [e.person, e.dept, e.count, e.points, '+' + e.bonus]), 'ยังไม่มีรายการที่ยืนยันแล้ว'),
+        h('ul', {class: 'rules'}, h('li', {}, 'ช่วยงานในแผนก = 1 · ข้ามแผนก = 2 · ปัญหาด่วน/คุณภาพ/ความปลอดภัย = 3'), h('li', {}, 'คู่เดิมนับได้ไม่เกิน 2 ครั้งต่อเดือน · ช่วยตัวเองหรืองานตาม JD ไม่นับ'), h('li', {}, 'โบนัส = คะแนนเดือนนั้น แต่ไม่เกิน +5 · ไม่มีการหักคะแนน')))),
+    h('div', {class: 'sec'}, h('h2', {}, 'ประวัติรายการล่าสุด'),
+      tableOf(['วันที่', 'ผู้ช่วย', 'ผู้ได้รับการช่วย', 'ประเภท', 'สถานะ', 'บันทึกโดย', 'ยืนยันโดย'], S.help.slice(0, 50).map((r) => [r.date, r.helper, r.receiver, r.help_type, {t: r.status, c: ({'รอยืนยัน': 'st-wait', 'ยืนยัน': 'st-yes', 'ไม่อนุมัติ': 'st-no'})[r.status]}, r.recorded_name || '', r.confirmed_name || '']), 'ยังไม่มีรายการ')));
+}
+
+// ---------- Users (admin) ----------
+function panelUsers() {
+  const email = h('input', {type: 'email', placeholder: 'อีเมล', style: 'min-width:220px'});
+  const name = h('input', {placeholder: 'ชื่อที่แสดง เช่น หัวหน้าคลัง – สมหญิง', style: 'min-width:220px'});
+  const role = h('select', {}, Object.entries(ROLES).map(([k, v]) => h('option', {value: k}, v)));
+  const dept = h('input', {placeholder: 'แผนก', style: 'width:140px'});
+  const out = h('span', {class: 'msg'});
+  const save = h('button', {class: 'btn', onclick: async () => {
+    if (!email.value.trim() || !name.value.trim()) { out.className = 'msg err'; out.textContent = 'กรอกอีเมลและชื่อ'; return; }
+    const { error } = await sb.rpc('admin_set_user', {p_email: email.value, p_name: name.value, p_role: role.value, p_dept: dept.value});
+    if (error) { out.className = 'msg err'; out.textContent = errText(error); return; }
+    await loadAll(); render();
+  }}, 'บันทึกผู้ใช้');
+  return h('section', {class: 'panel'},
+    h('div', {class: 'sec'}, h('h2', {}, 'ผู้ใช้งานและสิทธิ์'),
+      h('p', {class: 'desc'}, 'เพิ่มอีเมลที่นี่ก่อน แล้วผู้ใช้ login ด้วยลิงก์ทางอีเมล · ใส่อีเมลเดิมเพื่อแก้ไขสิทธิ์'),
+      h('div', {class: 'bar'}, email, name, role, dept, save, out),
+      tableOf(['อีเมล', 'ชื่อ', 'สิทธิ์', 'แผนก', ''], S.users.map((u) => [u.email, u.display_name, ROLES[u.role], u.dept || '',
+        u.email === S.me.email ? '' : h('button', {class: 'btn2', onclick: async () => { const { error } = await sb.rpc('admin_remove_user', {p_email: u.email}); if (error) { out.className = 'msg err'; out.textContent = errText(error); return; } await loadAll(); render(); }}, 'ลบ')]), 'ยังไม่มีผู้ใช้')));
+}
+
+// ---------- start ----------
+sb.auth.getUser().then(({data}) => { S.uid = data && data.user ? data.user.id : null; });
+sb.auth.onAuthStateChange((_e, session) => { S.uid = session ? session.user.id : null; });
+const startTab = location.hash.slice(1); if (['kpi', 'entry', 'help', 'users'].includes(startTab)) S.tab = startTab;
+boot().catch((e) => renderLogin('เกิดข้อผิดพลาด: ' + errText(e)));
+</script>
+</body>
+</html>
